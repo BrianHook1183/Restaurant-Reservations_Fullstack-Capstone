@@ -5,12 +5,14 @@ import React, { useEffect, useState } from "react";
  * Defines the reservation form.
  */
 
-// TODO US-01 = /reservations/:reservation_id/new
-
 function Form() {
   const initialFormState = {
     first_name: "",
     last_name: "",
+    mobile_number: "",
+    reservation_date: new Date(),
+    reservation_time: new Date(),
+    people: 1,
   };
   const [formData, setFormData] = useState({ ...initialFormState });
   const handleChange = ({ target }) => {
@@ -30,16 +32,17 @@ function Form() {
   /* 
   * First name: <input name="first_name" />
   * Last name: <input name="last_name" />
-  ! Mobile number: <input name="mobile_number" />
-  ! Date of reservation: <input name="reservation_date" />
-  ! Time of reservation: <input name="reservation_time" />
-  ! Number of people in the party, which must be at least 1 person. <input name="people" />
+  * Mobile number: <input name="mobile_number" />
+  * Date of reservation: <input name="reservation_date" />
+  * Time of reservation: <input name="reservation_time" />
+  * Number of people in the party,  <input name="people" />
+  TODO which must be at least 1 person.
   */
 
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="first_name">
-        Enter Your First Name:
+        First Name:
         <input
           id="first_name"
           type="text"
@@ -50,13 +53,57 @@ function Form() {
       </label>
       <br />
       <label htmlFor="last_name">
-        Enter Your Last Name:
+        Last Name:
         <input
           id="last_name"
           type="text"
           name="last_name"
           onChange={handleChange}
           value={formData.last_name}
+        />
+      </label>
+      <br />
+      <label htmlFor="mobile_number">
+        Mobile Number:
+        <input
+          id="mobile_number"
+          type="text"
+          name="mobile_number"
+          onChange={handleChange}
+          value={formData.mobile_number}
+        />
+      </label>
+      <br />
+      <label htmlFor="reservation_date">
+        Reservation Date:
+        <input
+          id="reservation_date"
+          type="date"
+          name="reservation_date"
+          onChange={handleChange}
+          value={formData.reservation_date}
+        />
+      </label>
+      <br />
+      <label htmlFor="reservation_time">
+        Reservation Time:
+        <input
+          id="reservation_time"
+          type="time"
+          name="reservation_time"
+          onChange={handleChange}
+          value={formData.reservation_time}
+        />
+      </label>
+      <br />
+      <label htmlFor="people">
+        Party Size:
+        <input
+          id="people"
+          type="number"
+          name="people"
+          onChange={handleChange}
+          value={formData.people}
         />
       </label>
       <br />

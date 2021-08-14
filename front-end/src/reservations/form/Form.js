@@ -26,6 +26,13 @@ function Form() {
     event.preventDefault();
     console.log("Submitted:", formData);
     setFormData({ ...initialFormState });
+    //TODO display the /dashboard page for the date of the new reservation
+  };
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+    console.log("Cancelled. Sending you back to previous page");
+    //TODO add browserRouter and use goBack()
   };
 
   //TODO
@@ -108,6 +115,7 @@ function Form() {
       </label>
       <br />
       <button type="submit">Submit</button>
+      <input type="button" value="Cancel" onClick={handleCancel}></input>
     </form>
   );
 }

@@ -4,16 +4,40 @@ import React from "react";
  * Defines the date navigation for the Dashboard view.
  */
 
-function DateNavigation() {
+function DateNavigation({ date }) {
   const handleClick = (event) => {
     event.preventDefault();
     const changeDateTo = event.target.innerText;
-    console.log("Nav clicked. which one?: ", changeDateTo);
+    if (changeDateTo === "Prev") {
+      console.log(
+        "Prev clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
+    if (changeDateTo === "Today") {
+      console.log(
+        "Today clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
+    if (changeDateTo === "Next") {
+      console.log(
+        "Next clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
   };
 
   //TODO
   /* 
-display next, previous, and today buttons that allow the user to see reservations on other dates
+  * display next, previous, and today buttons 
+  TODO that allow the user to see reservations on other dates
   */
 
   return (

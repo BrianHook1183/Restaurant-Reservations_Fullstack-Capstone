@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 /**
  * Defines the reservation form.
  */
 
 function Form() {
+  const history = useHistory();
+
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -24,14 +27,16 @@ function Form() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Submitted:", formData);
-    setFormData({ ...initialFormState });
-    //TODO display the /dashboard page for the date of the new reservation
+
+    // successful reservation submission redirects user to dashboard for the date of the new reservation.
+    const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
+    history.push(urlDashboardDate);
   };
 
   const handleCancel = (event) => {
     event.preventDefault();
-    console.log("Cancelled. Sending you back to previous page");
-    //TODO add browserRouter and use goBack()
+    // cancelling a new reservation while in progress sends user back to previous page.
+    history.goBack();
   };
 
   //TODO

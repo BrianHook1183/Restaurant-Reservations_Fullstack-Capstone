@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-// import ErrorAlert from "../layout/ErrorAlert";
+import React, { useState } from "react";
 
 /**
  * Defines the reservation form.

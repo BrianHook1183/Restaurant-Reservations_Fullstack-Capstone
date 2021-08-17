@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
-// import { listReservations } from "../utils/api";
-// import ErrorAlert from "../layout/ErrorAlert";
 import New from "./new/New";
 // import Seat from "./seat/Seat";
 // import Edit from "./edit/Edit";

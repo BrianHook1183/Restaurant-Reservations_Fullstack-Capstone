@@ -8,10 +8,12 @@ import New from "./new/New";
  * Defines the reservations page.
  */
 
-//TODO
-// US-01 = /reservations/:reservation_id/new
-// US-04 = /reservations/:reservation_id/seat
-// US-08 = /reservations/:reservation_id/edit
+// TODO
+/* 
+ US-04 = /reservations/:reservation_id/seat
+ US-06 = /reservations/:reservation_id/status
+ US-08 = /reservations/:reservation_id/edit
+ */
 
 function Reservations() {
   return (

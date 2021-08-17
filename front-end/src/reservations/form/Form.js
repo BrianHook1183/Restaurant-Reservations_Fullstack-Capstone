@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 
 //TODO
 /* 
-  - front or backend must ensure reservation is for at least least 1 person.
   - this page must display any error messages returned from the API
   - 
 */
@@ -117,6 +116,7 @@ function Form() {
           onChange={handleChange}
           value={formData.people}
           required={true}
+          min="1"
         />
       </label>
       <br />

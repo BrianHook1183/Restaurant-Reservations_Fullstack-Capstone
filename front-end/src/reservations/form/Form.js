@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { today, formatAsTime } from "../../utils/date-time";
 
 /**
  * Defines the reservation form.
@@ -18,8 +19,8 @@ function Form() {
     first_name: "",
     last_name: "",
     mobile_number: "",
-    reservation_date: new Date(),
-    reservation_time: new Date(),
+    reservation_date: today(),
+    reservation_time: formatAsTime(new Date().toTimeString()),
     people: 1,
   };
   const [formData, setFormData] = useState({ ...initialFormState });
@@ -36,6 +37,7 @@ function Form() {
 
     // successful reservation submission redirects user to dashboard for the date of the new reservation.
     const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
+
     history.push(urlDashboardDate);
   };
 

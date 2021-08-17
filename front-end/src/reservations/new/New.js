@@ -5,9 +5,6 @@ import Form from "../form/Form";
  * Defines the new reservation page.
  */
 
-//TODO
-// US-01 = /reservations/:reservation_id/new
-
 function New() {
   return (
     <main>

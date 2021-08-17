@@ -5,6 +5,13 @@ import { useHistory } from "react-router-dom";
  * Defines the reservation form.
  */
 
+//TODO
+/* 
+  - front or backend must ensure reservation is for at least least 1 person.
+  - this page must display any error messages returned from the API
+  - 
+*/
+
 function Form() {
   const history = useHistory();
 
@@ -38,17 +45,6 @@ function Form() {
     // cancelling a new reservation while in progress sends user back to previous page.
     history.goBack();
   };
-
-  //TODO
-  /* 
-  * First name: <input name="first_name" />
-  * Last name: <input name="last_name" />
-  * Mobile number: <input name="mobile_number" />
-  * Date of reservation: <input name="reservation_date" />
-  * Time of reservation: <input name="reservation_time" />
-  * Number of people in the party,  <input name="people" />
-  TODO which must be at least 1 person.
-  */
 
   return (
     <form onSubmit={handleSubmit}>

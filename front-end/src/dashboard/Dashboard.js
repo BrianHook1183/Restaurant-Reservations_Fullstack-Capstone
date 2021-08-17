@@ -23,13 +23,42 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  // handles clicks in DateNavigation component
+  const handleClick = (event) => {
+    event.preventDefault();
+    const changeDateTo = event.target.innerText;
+    if (changeDateTo === "Prev") {
+      console.log(
+        "Prev clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
+    if (changeDateTo === "Today") {
+      console.log(
+        "Today clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
+    if (changeDateTo === "Next") {
+      console.log(
+        "Next clicked, current date was ",
+        date,
+        " and is now: ",
+        "unknown"
+      );
+    }
+  };
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
-        <DateNavigation date={date} />
+        <DateNavigation handleClick={handleClick} />
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

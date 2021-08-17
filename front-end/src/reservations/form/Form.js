@@ -55,6 +55,7 @@ function Form() {
           name="first_name"
           onChange={handleChange}
           value={formData.first_name}
+          required={true}
         />
       </label>
       <br />
@@ -66,6 +67,7 @@ function Form() {
           name="last_name"
           onChange={handleChange}
           value={formData.last_name}
+          required={true}
         />
       </label>
       <br />
@@ -77,6 +79,7 @@ function Form() {
           name="mobile_number"
           onChange={handleChange}
           value={formData.mobile_number}
+          required={true}
         />
       </label>
       <br />
@@ -88,6 +91,7 @@ function Form() {
           name="reservation_date"
           onChange={handleChange}
           value={formData.reservation_date}
+          required={true}
         />
       </label>
       <br />
@@ -99,6 +103,7 @@ function Form() {
           name="reservation_time"
           onChange={handleChange}
           value={formData.reservation_time}
+          required={true}
         />
       </label>
       <br />
@@ -110,6 +115,7 @@ function Form() {
           name="people"
           onChange={handleChange}
           value={formData.people}
+          required={true}
         />
       </label>
       <br />

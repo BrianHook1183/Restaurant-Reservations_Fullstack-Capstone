@@ -36,7 +36,7 @@ function Form() {
     console.log("Submitted:", formData);
 
     // successful reservation submission redirects user to dashboard for the date of the new reservation.
-    const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
+    const urlDashboardDate = `/dashboard/${formData.reservation_date}`;
 
     history.push(urlDashboardDate);
   };

@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import New from "./new/New";
+import NotFound from "../layout/NotFound";
 // import Seat from "./seat/Seat";
 // import Status from "./status/Status";
 // import Edit from "./edit/Edit";
@@ -20,7 +21,7 @@ function Reservations() {
   return (
     <section>
       <Switch>
-        <Route path={"/:reservation_id/new"}>
+        <Route path={"/reservations/new"}>
           <New />
         </Route>
         {/* <Route path={"/:reservation_id/seat"}>
@@ -32,6 +33,9 @@ function Reservations() {
         <Route path={"/:reservation_id/edit"}>
           <Edit />
         </Route> */}
+        <Route>
+          <NotFound />
+        </Route>
       </Switch>
     </section>
   );

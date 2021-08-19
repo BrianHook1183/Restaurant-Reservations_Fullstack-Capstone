@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import Reservations from "../reservations/Reservations";
-import { today } from "../utils/date-time";
+import { today, previous, next } from "../utils/date-time";
 import NotFound from "./NotFound";
 
 /**
@@ -13,6 +13,36 @@ import NotFound from "./NotFound";
  * @returns {JSX.Element}
  */
 function Routes() {
+  // handles clicks in DateNavigation component.
+  //! Just trying this out: lifted from Dashboard so *date* can be passed as prop to see if it triggers loadDashboard hook.
+  const [defaultDate, setDefaultDate] = useState(today());
+
+  // const params = useParams();
+  // if (params.date) {
+  //   setDefaultDate(params.date);
+  // }
+
+  const handleParams = (paramDate) => {
+    setDefaultDate(paramDate);
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    const changeDateTo = event.target.innerText;
+    if (changeDateTo === "Prev") {
+      const prevDate = previous(defaultDate);
+      setDefaultDate(prevDate);
+    }
+    if (changeDateTo === "Today") {
+      const todayDate = today();
+      setDefaultDate(todayDate);
+    }
+    if (changeDateTo === "Next") {
+      const nextDate = next(defaultDate);
+      setDefaultDate(nextDate);
+    }
+  };
+
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -28,7 +58,12 @@ function Routes() {
         <Dashboard />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        {/* <Dashboard date={today()} /> */}
+        <Dashboard
+          propDate={defaultDate}
+          handleParams={handleParams}
+          handleClick={handleClick}
+        />
       </Route>
       <Route>
         <NotFound />

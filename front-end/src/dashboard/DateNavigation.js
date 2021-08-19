@@ -5,12 +5,6 @@ import React from "react";
  */
 
 function DateNavigation({ handleClick }) {
-  //TODO
-  /* 
-  * display next, previous, and today buttons 
-  TODO that allow the user to see reservations on other dates
-  */
-
   return (
     <div>
       <button type="button" onClick={handleClick}>

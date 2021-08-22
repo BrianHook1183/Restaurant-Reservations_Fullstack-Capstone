@@ -123,7 +123,7 @@ function Form() {
       </label>
       <br />
       <button type="submit">Submit</button>
-      <input type="button" value="Cancel" onClick={handleCancel}></input>
+      <button type="button" value="Cancel" onClick={handleCancel}>Cancel</button>
     </form>
   );
 }

@@ -3,6 +3,7 @@ import useQuery from "../utils/useQuery";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
+import ReservationsList from "../reservations/list/ReservationsList";
 
 /**
  * Defines the dashboard page.
@@ -44,6 +45,7 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
         <DateNavigation date={date} />
       </div>
+      <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
     </main>

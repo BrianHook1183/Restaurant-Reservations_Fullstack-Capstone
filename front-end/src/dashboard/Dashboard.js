@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import useQuery from "../utils/useQuery";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
@@ -11,16 +11,13 @@ import DateNavigation from "./DateNavigation";
  * @returns {JSX.Element}
  */
 
-function Dashboard({ date, handleClick, handleParams }) {
-  const params = useParams();
-  if (params.date) {
-    const paramDate = params.date;
-    // console.log("paramDate", paramDate);
-
-    if (paramDate !== date) {
-      // console.log("date: ", date, " paramDate: ", paramDate);
-      handleParams(paramDate);
-    }
+function Dashboard({ date }) {
+  // date is passed from Routes.js as today()
+  // IF there is a date provided in URL, then  = date
+  const dateInUrl = useQuery().get("date");
+  if (dateInUrl) {
+    console.log("dateInUrl is: ", dateInUrl);
+    date = dateInUrl;
   }
 
   const [reservations, setReservations] = useState([]);
@@ -45,7 +42,7 @@ function Dashboard({ date, handleClick, handleParams }) {
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
-        <DateNavigation handleClick={handleClick} />
+        <DateNavigation date={date} />
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

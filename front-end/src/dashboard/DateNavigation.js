@@ -1,22 +1,24 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { today, previous, next } from "../utils/date-time";
 
 /**
  * Defines the date navigation for the Dashboard view.
  */
 
-function DateNavigation({ handleClick }) {
+function DateNavigation({ date }) {
   return (
-    <div>
-      <button type="button" onClick={handleClick}>
-        Prev
-      </button>
-      <button type="button" onClick={handleClick}>
-        Today
-      </button>
-      <button type="button" onClick={handleClick}>
-        Next
-      </button>
-    </div>
+    <>
+      <Link to={`/dashboard?date=${previous(date)}`}>
+        <button type="button">Prev</button>
+      </Link>
+      <Link to={`/dashboard?date=${today()}`}>
+        <button type="button">Today</button>
+      </Link>
+      <Link to={`/dashboard?date=${next(date)}`}>
+        <button type="button">Next</button>
+      </Link>
+    </>
   );
 }
 

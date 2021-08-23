@@ -36,7 +36,7 @@ function Form() {
     console.log("Submitted:", formData);
 
     // successful reservation submission redirects user to dashboard for the date of the new reservation.
-    const urlDashboardDate = `/dashboard/${formData.reservation_date}`;
+    const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
 
     history.push(urlDashboardDate);
   };
@@ -123,7 +123,9 @@ function Form() {
       </label>
       <br />
       <button type="submit">Submit</button>
-      <button type="button" value="Cancel" onClick={handleCancel}>Cancel</button>
+      <button type="button" value="Cancel" onClick={handleCancel}>
+        Cancel
+      </button>
     </form>
   );
 }

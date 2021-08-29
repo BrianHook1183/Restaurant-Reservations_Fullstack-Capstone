@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery";
 import { listReservations } from "../utils/api";
+import formatDisplayDate from "../utils/format-display-date";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
@@ -38,11 +39,16 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  // convert YYYY-MM-DD to a more user-friendly format
+  // const displayDate = formatDisplayDate(date);
+  // const displayDateShort = formatDisplayDate(date, "short");
+  const displayDateLong = formatDisplayDate(date, "long");
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+        <h4 className="mb-0">Reservations for: {displayDateLong}</h4>
         <DateNavigation date={date} />
       </div>
       <ReservationsList reservations={reservations} />

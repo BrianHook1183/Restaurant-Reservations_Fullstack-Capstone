@@ -8,7 +8,6 @@ function Reservation({
   reservation_time,
   people,
 }) {
-  console.log("Reservation Card for id: ", reservation_id);
   return (
     <>
       <h4>

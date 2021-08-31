@@ -48,5 +48,15 @@
     "people": 2,
     "created_at": "2020-12-10T08:31:32.326Z",
     "updated_at": "2020-12-10T08:31:32.326Z"
+  },
+  {
+    "first_name": "Brian",
+    "last_name": "Hook",
+    "mobile_number": "123-646-8897",
+    "reservation_date": "2021-08-31",
+    "reservation_time": "18:00",
+    "people": 2,
+    "created_at": "2021-08-30T08:31:32.326Z",
+    "updated_at": "2021-08-30T08:31:32.326Z"
   }
 ]

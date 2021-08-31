@@ -23,7 +23,6 @@ export default function formatDisplayDate(date, format) {
 
   // "Tuesday, Aug 10, 2021"
   if (format === "long") {
-    console.log("alternate date formats: Tue Aug 10 2021 --or-- Aug 10 (Tue)");
     return dateObject.toLocaleDateString("en-us", {
       weekday: "long",
       year: "numeric",

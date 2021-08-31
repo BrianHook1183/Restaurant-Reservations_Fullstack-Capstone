@@ -53,7 +53,6 @@ function Dashboard({ date }) {
       </div>
       <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }

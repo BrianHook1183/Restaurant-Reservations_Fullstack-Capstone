@@ -1,6 +1,9 @@
 export default function formatDisplayDate(date, format) {
-  const dateObject = new Date(`${date}+"T00:00:00"`);
-
+  const dateTime = `${date}T00:00:00`;
+  const dateObject = new Date(dateTime);
+  console.log("date", date);
+  console.log("dateTime", dateTime);
+  console.log("dateObject", dateObject);
   // takes the "YYYY-MM-DD" format, like "2021-08-10" and returns:
 
   // "Aug 10 (Tue)"

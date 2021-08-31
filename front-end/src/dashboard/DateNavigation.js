@@ -10,7 +10,7 @@ function DateNavigation({ date }) {
   return (
     <>
       <Link to={`/dashboard?date=${previous(date)}`}>
-        <button type="button">Prev</button>
+        <button type="button">Previous</button>
       </Link>
       <Link to={`/dashboard?date=${today()}`}>
         <button type="button">Today</button>

@@ -13,6 +13,7 @@ function ReservationsList({ reservations }) {
       <li key={index}>
         <Reservation
           reservation_id={reservation.id}
+          reservation_date={reservation.date}
           first_name={reservation.first_name}
           last_name={reservation.last_name}
           mobile_number={reservation.mobile_number}

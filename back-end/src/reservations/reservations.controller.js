@@ -12,6 +12,14 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
+// Create a new reservation
+async function create(req, res) {
+  const newReservation = req.body.data;
+  const data = await service.create(newReservation);
+  res.status(201).json({ data });
+}
+
 module.exports = {
+  create: asyncErrorBoundary(create),
   list: asyncErrorBoundary(list),
 };

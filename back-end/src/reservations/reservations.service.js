@@ -13,7 +13,7 @@ function create(reservation) {
   return knex("reservations")
     .insert(reservation)
     .returning("*")
-    .then((newReservation) => newReservation[0]);
+    .then((newReservations) => newReservations[0]);
 }
 
 module.exports = {

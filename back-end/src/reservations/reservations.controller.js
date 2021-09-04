@@ -31,6 +31,41 @@ function hasOnlyValidProperties(req, res, next) {
 
 const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 
+const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
+const timeFormat = /^\d\d:\d\d$/;
+
+function dateIsValid(dateString) {
+  return dateString.match(dateFormat)?.[0];
+}
+
+function timeIsValid(timeString) {
+  return timeString.match(timeFormat)?.[0];
+}
+
+function hasValidValues(req, res, next) {
+  const { reservation_date, reservation_time, people } = req.body.data;
+
+  if (!dateIsValid(reservation_date)) {
+    return next({
+      status: 400,
+      message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
+    });
+  }
+  if (!timeIsValid(reservation_time)) {
+    return next({
+      status: 400,
+      message: "reservation_time must be in HH:MM:SS (or HH:MM) format",
+    });
+  }
+  if (!Number.isInteger(people) || people < 1) {
+    return next({
+      status: 400,
+      message: "# of people must be a whole number and >= 1",
+    });
+  }
+  next();
+}
+
 //! Validation ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //* CRUD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
@@ -55,6 +90,7 @@ module.exports = {
   create: [
     hasOnlyValidProperties,
     hasRequiredProperties,
+    hasValidValues,
     asyncErrorBoundary(create),
   ],
   list: asyncErrorBoundary(list),

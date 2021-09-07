@@ -8,11 +8,10 @@ import Form from "../form/Form";
 function New() {
   return (
     <main>
-      <h1>...Under Construction...</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Make a Reservation</h4>
-        <Form />
+        <h1 className="mb-0">Make a Reservation</h1>
       </div>
+      <Form />
       {/* <ErrorAlert error={reservationsError} /> */}
     </main>
   );

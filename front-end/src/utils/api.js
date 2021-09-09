@@ -20,7 +20,7 @@ headers.append("Content-Type", "application/json");
  * This function is NOT exported because it is not needed outside of this file.
  *
  * @param url
- *  the url for the requst.
+ *  the url for the request.
  * @param options
  *  any options for fetch
  * @param onCancel
@@ -66,4 +66,24 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+/**
+ * Posts a new reservation
+ */
+
+export async function postReservation(reservationDetails, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  console.log(`url for api POST is ${url}`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: reservationDetails }),
+    signal,
+  };
+  return await fetchJson(url, options).then(
+    console.log(
+      `reservation for ${reservationDetails.first_name} was posted through API`
+    )
+  );
 }

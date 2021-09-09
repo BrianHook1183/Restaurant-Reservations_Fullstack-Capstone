@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { today, formatAsTime } from "../../utils/date-time";
+import { postReservation } from "../../utils/api";
 
 /**
  * Defines the reservation form.
@@ -31,13 +32,19 @@ function Form() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Submitted:", formData);
+    const abortController = new AbortController();
+
+    const postedReservation = await postReservation(
+      formData,
+      abortController.signal
+    );
+
+    console.log("postedReservation:", postedReservation);
 
     // successful reservation submission redirects user to dashboard for the date of the new reservation.
     const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
-
     history.push(urlDashboardDate);
   };
 

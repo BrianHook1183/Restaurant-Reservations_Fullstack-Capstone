@@ -12,7 +12,6 @@ function New() {
         <h1 className="mb-0">Make a Reservation</h1>
       </div>
       <Form />
-      {/* <ErrorAlert error={reservationsError} /> */}
     </main>
   );
 }

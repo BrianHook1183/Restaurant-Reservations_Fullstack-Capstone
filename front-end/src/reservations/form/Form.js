@@ -2,18 +2,14 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { today, formatAsTime } from "../../utils/date-time";
 import { postReservation } from "../../utils/api";
+import ErrorAlert from "../../layout/ErrorAlert";
 
 /**
  * Defines the reservation form.
  */
 
-//TODO
-/* 
-  - this page must display any error messages returned from the API
-  - 
-*/
-
 function Form() {
+  const [reservationsError, setReservationsError] = useState(null);
   const history = useHistory();
 
   const initialFormState = {
@@ -24,7 +20,9 @@ function Form() {
     reservation_time: formatAsTime(new Date().toTimeString()),
     people: 1,
   };
+
   const [formData, setFormData] = useState({ ...initialFormState });
+
   const handleChange = ({ target }) => {
     setFormData({
       ...formData,
@@ -32,20 +30,16 @@ function Form() {
     });
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const abortController = new AbortController();
+    setReservationsError(null);
 
-    const postedReservation = await postReservation(
-      formData,
-      abortController.signal
-    );
-
-    console.log("postedReservation:", postedReservation);
-
-    // successful reservation submission redirects user to dashboard for the date of the new reservation.
-    const urlDashboardDate = `/dashboard?date=${formData.reservation_date}`;
-    history.push(urlDashboardDate);
+    postReservation(formData, abortController.signal)
+      .then(console.log("posted reservation for", formData.first_name))
+      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+      .catch(setReservationsError);
+    return () => abortController.abort();
   };
 
   const handleCancel = (event) => {
@@ -55,85 +49,88 @@ function Form() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="first_name">
-        First Name:
-        <input
-          id="first_name"
-          type="text"
-          name="first_name"
-          onChange={handleChange}
-          value={formData.first_name}
-          required={true}
-        />
-      </label>
-      <br />
-      <label htmlFor="last_name">
-        Last Name:
-        <input
-          id="last_name"
-          type="text"
-          name="last_name"
-          onChange={handleChange}
-          value={formData.last_name}
-          required={true}
-        />
-      </label>
-      <br />
-      <label htmlFor="mobile_number">
-        Mobile Number:
-        <input
-          id="mobile_number"
-          type="text"
-          name="mobile_number"
-          onChange={handleChange}
-          value={formData.mobile_number}
-          required={true}
-        />
-      </label>
-      <br />
-      <label htmlFor="reservation_date">
-        Reservation Date:
-        <input
-          id="reservation_date"
-          type="date"
-          name="reservation_date"
-          onChange={handleChange}
-          value={formData.reservation_date}
-          required={true}
-        />
-      </label>
-      <br />
-      <label htmlFor="reservation_time">
-        Reservation Time:
-        <input
-          id="reservation_time"
-          type="time"
-          name="reservation_time"
-          onChange={handleChange}
-          value={formData.reservation_time}
-          required={true}
-        />
-      </label>
-      <br />
-      <label htmlFor="people">
-        Party Size:
-        <input
-          id="people"
-          type="number"
-          name="people"
-          onChange={handleChange}
-          value={formData.people}
-          required={true}
-          min="1"
-        />
-      </label>
-      <br />
-      <button type="submit">Submit</button>
-      <button type="button" value="Cancel" onClick={handleCancel}>
-        Cancel
-      </button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="first_name">
+          First Name:
+          <input
+            id="first_name"
+            type="text"
+            name="first_name"
+            onChange={handleChange}
+            value={formData.first_name}
+            required={true}
+          />
+        </label>
+        <br />
+        <label htmlFor="last_name">
+          Last Name:
+          <input
+            id="last_name"
+            type="text"
+            name="last_name"
+            onChange={handleChange}
+            value={formData.last_name}
+            required={true}
+          />
+        </label>
+        <br />
+        <label htmlFor="mobile_number">
+          Mobile Number:
+          <input
+            id="mobile_number"
+            type="text"
+            name="mobile_number"
+            onChange={handleChange}
+            value={formData.mobile_number}
+            required={true}
+          />
+        </label>
+        <br />
+        <label htmlFor="reservation_date">
+          Reservation Date:
+          <input
+            id="reservation_date"
+            type="date"
+            name="reservation_date"
+            onChange={handleChange}
+            value={formData.reservation_date}
+            required={true}
+          />
+        </label>
+        <br />
+        <label htmlFor="reservation_time">
+          Reservation Time:
+          <input
+            id="reservation_time"
+            type="time"
+            name="reservation_time"
+            onChange={handleChange}
+            value={formData.reservation_time}
+            required={true}
+          />
+        </label>
+        <br />
+        <label htmlFor="people">
+          Party Size:
+          <input
+            id="people"
+            type="number"
+            name="people"
+            onChange={handleChange}
+            required={true}
+            min="1"
+            value={formData.people}
+          />
+        </label>
+        <br />
+        <button type="submit">Submit</button>
+        <button type="button" value="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </form>
+      <ErrorAlert error={reservationsError} />
+    </>
   );
 }
 

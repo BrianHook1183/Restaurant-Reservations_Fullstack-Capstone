@@ -24,9 +24,19 @@ function Form() {
   const [formData, setFormData] = useState({ ...initialFormState });
 
   const handleChange = ({ target }) => {
+    let value = target.value;
+
+    // Fixes issue of *people* changing into a string
+    if (target.name === "people" && typeof value === "string") {
+      value = +value;
+      console.log(
+        "something converted people from a number to a string, but it has now been fixed. TODO: Find out why this is happening."
+      );
+    }
+
     setFormData({
       ...formData,
-      [target.name]: target.value,
+      [target.name]: value,
     });
   };
 

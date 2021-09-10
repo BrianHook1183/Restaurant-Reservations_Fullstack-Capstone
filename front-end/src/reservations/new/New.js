@@ -12,6 +12,8 @@ The /reservations/new page will display an error message with className="alert a
 2) The reservation date is in the past. Only future reservations are allowed.
 */
 
+//TODO Refactor Form and New so that error messages appear here
+
 function New() {
   return (
     <main>

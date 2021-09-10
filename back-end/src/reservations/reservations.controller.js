@@ -34,8 +34,13 @@ const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 const timeFormat = /^\d\d:\d\d$/;
 
-function dateIsValid(dateString) {
+function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
+}
+
+function dateNotTuesday(dateString) {
+  const date = new Date(dateString);
+  return date.getUTCDay() !== 2;
 }
 
 function timeIsValid(timeString) {
@@ -45,10 +50,17 @@ function timeIsValid(timeString) {
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
 
-  if (!dateIsValid(reservation_date)) {
+  if (!dateFormatIsValid(reservation_date)) {
     return next({
       status: 400,
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
+    });
+  }
+  if (!dateNotTuesday(reservation_date)) {
+    return next({
+      status: 400,
+      message:
+        "reservation_date must be in the future and not on a Tuesday when restaurant is closed",
     });
   }
   if (!timeIsValid(reservation_time)) {

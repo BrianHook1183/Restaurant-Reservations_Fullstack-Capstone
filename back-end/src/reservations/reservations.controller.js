@@ -43,6 +43,12 @@ function dateNotTuesday(dateString) {
   return date.getUTCDay() !== 2;
 }
 
+function dateNotInPast(reservation_date, reservation_time) {
+  const today = Date.now();
+  const date = new Date(`${reservation_date} ${reservation_time}`).valueOf();
+  return date > today;
+}
+
 function timeIsValid(timeString) {
   return timeString.match(timeFormat)?.[0];
 }
@@ -60,7 +66,14 @@ function hasValidValues(req, res, next) {
     return next({
       status: 400,
       message:
-        "reservation_date must be in the future and not on a Tuesday when restaurant is closed",
+        "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
+    });
+  }
+  if (!dateNotInPast(reservation_date, reservation_time)) {
+    return next({
+      status: 400,
+      message:
+        "The reservation date is in the past. Only future reservations are allowed",
     });
   }
   if (!timeIsValid(reservation_time)) {

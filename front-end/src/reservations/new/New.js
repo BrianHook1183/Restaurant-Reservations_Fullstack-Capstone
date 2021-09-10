@@ -5,6 +5,13 @@ import Form from "../form/Form";
  * Defines the new reservation page.
  */
 
+//TODO  US-02
+/* 
+The /reservations/new page will display an error message with className="alert alert-danger" if any of the following constraints are violated:
+1) The reservation date is a Tuesday as the restaurant is closed on Tuesdays.
+2) The reservation date is in the past. Only future reservations are allowed.
+*/
+
 function New() {
   return (
     <main>

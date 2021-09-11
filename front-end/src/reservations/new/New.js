@@ -2,17 +2,8 @@ import React from "react";
 import Form from "../form/Form";
 
 /**
- * Defines the new reservation page.
+ * Defines the page that is used to create a new reservation
  */
-
-//TODO  US-02
-/* 
-The /reservations/new page will display an error message with className="alert alert-danger" if any of the following constraints are violated:
-1) The reservation date is a Tuesday as the restaurant is closed on Tuesdays.
-2) The reservation date is in the past. Only future reservations are allowed.
-*/
-
-//TODO Refactor Form and New so that error messages appear here
 
 function New() {
   return (

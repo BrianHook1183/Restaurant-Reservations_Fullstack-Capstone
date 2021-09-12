@@ -4,6 +4,16 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
+//TODO US-03
+/* 
+* The /reservations API will return 400, along with an informative error message, if any of the following additional constraints are violated:
+TODO --- The reservation time is before 10:30 AM.
+
+TODO --- The reservation time is after 9:30 PM, because the restaurant closes at 10:30 PM and the customer needs to have time to enjoy their meal.
+
+TODO --- The reservation date and time combination is in the past. Only future reservations are allowed. E.g., if it is noon, only allow reservations starting after noon today.
+*/
+
 const VALID_PROPERTIES = [
   "first_name",
   "last_name",

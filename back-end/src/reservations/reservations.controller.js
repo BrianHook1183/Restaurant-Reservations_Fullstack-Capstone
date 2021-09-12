@@ -34,8 +34,19 @@ const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 const timeFormat = /^\d\d:\d\d$/;
 
-function dateIsValid(dateString) {
+function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
+}
+
+function dateNotTuesday(dateString) {
+  const date = new Date(dateString);
+  return date.getUTCDay() !== 2;
+}
+
+function dateNotInPast(reservation_date, reservation_time) {
+  const today = Date.now();
+  const date = new Date(`${reservation_date} ${reservation_time}`).valueOf();
+  return date > today;
 }
 
 function timeIsValid(timeString) {
@@ -45,10 +56,24 @@ function timeIsValid(timeString) {
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
 
-  if (!dateIsValid(reservation_date)) {
+  if (!dateFormatIsValid(reservation_date)) {
     return next({
       status: 400,
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
+    });
+  }
+  if (!dateNotTuesday(reservation_date)) {
+    return next({
+      status: 400,
+      message:
+        "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
+    });
+  }
+  if (!dateNotInPast(reservation_date, reservation_time)) {
+    return next({
+      status: 400,
+      message:
+        "The reservation_time and/or reservation_date is in the past. Only future reservations are allowed",
     });
   }
   if (!timeIsValid(reservation_time)) {

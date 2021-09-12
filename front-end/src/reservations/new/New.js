@@ -2,7 +2,7 @@ import React from "react";
 import Form from "../form/Form";
 
 /**
- * Defines the new reservation page.
+ * Defines the page that is used to create a new reservation
  */
 
 function New() {

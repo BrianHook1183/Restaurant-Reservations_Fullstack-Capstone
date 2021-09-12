@@ -74,16 +74,12 @@ export async function listReservations(params, signal) {
 
 export async function postReservation(reservationDetails, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  console.log(`url for api POST is ${url}`);
+  // console.log(`url for api POST is ${url}`);
   const options = {
     method: "POST",
     headers,
     body: JSON.stringify({ data: reservationDetails }),
     signal,
   };
-  return await fetchJson(url, options).then(
-    console.log(
-      `reservation for ${reservationDetails.first_name} was posted through API`
-    )
-  );
+  return await fetchJson(url, options);
 }

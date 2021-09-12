@@ -18,7 +18,6 @@ function Dashboard({ date }) {
   // IF there is a date provided in URL, then  = date
   const dateInUrl = useQuery().get("date");
   if (dateInUrl) {
-    console.log("dateInUrl is: ", dateInUrl);
     date = dateInUrl;
   }
 
@@ -27,13 +26,10 @@ function Dashboard({ date }) {
 
   useEffect(loadDashboard, [date]);
 
-  console.log("fresh dashboard load/reload, current *date* is ", date);
-
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-      .then(console.log("date used in listReservations is: ", date))
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();

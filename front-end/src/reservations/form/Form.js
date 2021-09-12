@@ -5,7 +5,7 @@ import { postReservation } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 /**
- * Defines the reservation form.
+ * A controlled form used for creating and modifying reservations
  */
 
 function Form() {
@@ -29,9 +29,6 @@ function Form() {
     // Fixes issue of *people* changing into a string
     if (target.name === "people" && typeof value === "string") {
       value = +value;
-      console.log(
-        "something converted people from a number to a string, but it has now been fixed. TODO: Find out why this is happening."
-      );
     }
 
     setFormData({

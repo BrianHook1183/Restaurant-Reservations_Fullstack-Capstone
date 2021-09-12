@@ -2,10 +2,6 @@ import React from "react";
 import Reservation from "../reservation/Reservation";
 
 function ReservationsList({ reservations }) {
-  console.log("ReservationsList rendered with reservations prop containing: ", [
-    reservations,
-  ]);
-
   let reservationsList = null;
 
   if (reservations.length) {

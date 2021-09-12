@@ -73,7 +73,7 @@ function hasValidValues(req, res, next) {
     return next({
       status: 400,
       message:
-        "The reservation date is in the past. Only future reservations are allowed",
+        "The reservation_time and/or reservation_date is in the past. Only future reservations are allowed",
     });
   }
   if (!timeIsValid(reservation_time)) {

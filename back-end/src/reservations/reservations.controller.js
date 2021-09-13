@@ -55,8 +55,14 @@ function dateNotTuesday(dateString) {
 
 function dateNotInPast(reservation_date, reservation_time) {
   const today = Date.now();
-  const date = new Date(`${reservation_date} ${reservation_time}`).valueOf();
-  return date > today;
+  const date = new Date(`${reservation_date} ${reservation_time}`);
+  return date.valueOf() > today;
+}
+
+function timeDuringBizHours(reservation_time) {
+  const open = "10:30";
+  const close = "21:30";
+  return reservation_time <= close && reservation_time >= open;
 }
 
 function timeIsValid(timeString) {
@@ -65,6 +71,13 @@ function timeIsValid(timeString) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
+
+  if (!timeDuringBizHours(reservation_time)) {
+    return next({
+      status: 400,
+      message: "The reservation time must be between 10:30 AM and 9:30 PM",
+    });
+  }
 
   if (!dateFormatIsValid(reservation_date)) {
     return next({

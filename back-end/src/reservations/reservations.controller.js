@@ -34,8 +34,24 @@ const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 const timeFormat = /^\d\d:\d\d$/;
 
+function timeIsValid(timeString) {
+  return timeString.match(timeFormat)?.[0];
+}
+
 function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
+}
+
+function dateNotInPast(reservation_date, reservation_time) {
+  const today = Date.now();
+  const date = new Date(`${reservation_date} ${reservation_time}`);
+  return date.valueOf() > today;
+}
+
+function timeDuringBizHours(reservation_time) {
+  const open = "10:30";
+  const close = "21:30";
+  return reservation_time <= close && reservation_time >= open;
 }
 
 function dateNotTuesday(dateString) {
@@ -43,30 +59,25 @@ function dateNotTuesday(dateString) {
   return date.getUTCDay() !== 2;
 }
 
-function dateNotInPast(reservation_date, reservation_time) {
-  const today = Date.now();
-  const date = new Date(`${reservation_date} ${reservation_time}`).valueOf();
-  return date > today;
-}
-
-function timeIsValid(timeString) {
-  return timeString.match(timeFormat)?.[0];
-}
-
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
 
+  if (!Number.isInteger(people) || people < 1) {
+    return next({
+      status: 400,
+      message: "# of people must be a whole number and >= 1",
+    });
+  }
+  if (!timeIsValid(reservation_time)) {
+    return next({
+      status: 400,
+      message: "reservation_time must be in HH:MM:SS (or HH:MM) format",
+    });
+  }
   if (!dateFormatIsValid(reservation_date)) {
     return next({
       status: 400,
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
-    });
-  }
-  if (!dateNotTuesday(reservation_date)) {
-    return next({
-      status: 400,
-      message:
-        "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
     });
   }
   if (!dateNotInPast(reservation_date, reservation_time)) {
@@ -76,16 +87,17 @@ function hasValidValues(req, res, next) {
         "The reservation_time and/or reservation_date is in the past. Only future reservations are allowed",
     });
   }
-  if (!timeIsValid(reservation_time)) {
+  if (!timeDuringBizHours(reservation_time)) {
     return next({
       status: 400,
-      message: "reservation_time must be in HH:MM:SS (or HH:MM) format",
+      message: "The reservation time must be between 10:30 AM and 9:30 PM",
     });
   }
-  if (!Number.isInteger(people) || people < 1) {
+  if (!dateNotTuesday(reservation_date)) {
     return next({
       status: 400,
-      message: "# of people must be a whole number and >= 1",
+      message:
+        "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
     });
   }
   next();

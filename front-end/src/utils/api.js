@@ -83,3 +83,19 @@ export async function postReservation(reservationDetails, signal) {
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * Posts a new table
+ */
+
+export async function postTable(tableDetails, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  console.log(`url for api POST is ${url}`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: tableDetails }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}

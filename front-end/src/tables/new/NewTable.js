@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-// import { postTable } from "../../utils/api";
+import { postTable } from "../../utils/api";
 import { today } from "../../utils/date-time";
 import ErrorAlert from "../../layout/ErrorAlert";
 
@@ -38,7 +38,7 @@ function NewTable() {
     console.log(
       `will POST table ${formData.table_name}, capacity: ${formData.capacity}`
     );
-    /* 
+
     const abortController = new AbortController();
     setTablesError(null);
 
@@ -51,7 +51,6 @@ function NewTable() {
       .then(() => history.push(`/dashboard?date=${today()}`))
       .catch(setTablesError);
     return () => abortController.abort();
-    */
   };
 
   const handleCancel = (event) => {

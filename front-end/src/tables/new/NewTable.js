@@ -59,7 +59,7 @@ function NewTable() {
   };
 
   return (
-    <main>
+    <section>
       <div className="d-md-flex mb-3">
         <h1 className="mb-0">Add a New Table</h1>
       </div>
@@ -95,7 +95,7 @@ function NewTable() {
         </button>
       </form>
       <ErrorAlert error={tablesError} />
-    </main>
+    </section>
   );
 }
 

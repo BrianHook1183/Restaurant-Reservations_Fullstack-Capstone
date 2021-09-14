@@ -9,7 +9,7 @@ import NotFound from "../layout/NotFound";
 
 function Tables() {
   return (
-    <section>
+    <main>
       <Switch>
         <Route path={"/tables/new"}>
           <NewTable />
@@ -18,7 +18,7 @@ function Tables() {
           <NotFound />
         </Route>
       </Switch>
-    </section>
+    </main>
   );
 }
 

@@ -1,19 +1,18 @@
 const knex = require("../db/connection");
 
-// returns all reservations for the specified date
-function list(date) {
-  return knex("reservations")
+// returns all tables
+function list() {
+  return knex("tables")
     .select("*")
-    .where({ reservation_date: date })
-    .orderBy("reservation_time");
+    .orderBy("table_name");
 }
 
-// posts new reservation and then returns it
-function create(reservation) {
-  return knex("reservations")
-    .insert(reservation)
+// posts new table
+function create(table) {
+  return knex("tables")
+    .insert(table)
     .returning("*")
-    .then((newReservations) => newReservations[0]);
+    .then((newTables) => newTables[0]);
 }
 
 module.exports = {

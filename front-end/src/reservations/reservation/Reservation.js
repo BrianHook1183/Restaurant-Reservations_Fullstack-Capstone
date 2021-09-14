@@ -11,7 +11,7 @@ function Reservation({
   return (
     <>
       <h4>
-        {reservation_id} at {reservation_time} (party of {people})
+        {reservation_time} (party of {people})
       </h4>
       <p>
         Contact Details for {first_name} {last_name}: {mobile_number}

@@ -8,7 +8,7 @@ function ReservationsList({ reservations }) {
     reservationsList = reservations.map((reservation, index) => (
       <li key={index}>
         <Reservation
-          reservation_id={reservation.id}
+          reservation_id={reservation.reservation_id}
           reservation_date={reservation.date}
           first_name={reservation.first_name}
           last_name={reservation.last_name}

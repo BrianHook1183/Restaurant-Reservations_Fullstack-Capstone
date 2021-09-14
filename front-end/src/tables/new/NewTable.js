@@ -14,7 +14,7 @@ function NewTable() {
 
   const initialFormState = {
     table_name: "",
-    capacity: 1,
+    capacity: "",
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
@@ -48,7 +48,7 @@ function NewTable() {
           `POSTed table ${formData.table_name}, capacity: ${formData.capacity}`
         )
       )
-      .then(() => history.push(`/dashboard?date=${today()}`))
+      .then(() => history.push(`/dashboard`))
       .catch(setTablesError);
     return () => abortController.abort();
   };

@@ -86,6 +86,18 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+// update handler for assigning a reservation to a table
+async function update(req, res) {
+  const { table_id } = req.params;
+  const { reservation_id } = req.body.data;
+  const updatedTable = {
+    reservation_id,
+    table_id,
+  };
+  const data = await service.update(updatedTable);
+  res.json({ data });
+}
+
 //! CRUD ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 module.exports = {
@@ -96,4 +108,5 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   list: asyncErrorBoundary(list),
+  update: asyncErrorBoundary(update),
 };

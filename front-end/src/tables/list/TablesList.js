@@ -12,7 +12,7 @@ function TablesList({ tables }) {
             <Table
               name={table.table_name}
               capacity={table.capacity}
-              status={table.table_status}
+              status={table.reservation_id}
               id={table.table_id}
             />
           </div>

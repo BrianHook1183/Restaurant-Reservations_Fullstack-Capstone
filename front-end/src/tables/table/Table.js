@@ -7,7 +7,12 @@ function Table({ name, capacity, status, id }) {
       <ul className="list-group list-group-flush">
         <li className="list-group-item">Capacity: {capacity}</li>
         <li className="list-group-item">
-          Status: <span data-table-id-status={`${id}`}>{status || "Free"}</span>
+          <div
+            className={`bg-${status ? "danger" : "success"}`}
+            data-table-id-status={`${id}`}
+          >
+            <h6 className="text-center">{status ? "Occupied" : "Free"}</h6>
+          </div>
         </li>
       </ul>
     </>

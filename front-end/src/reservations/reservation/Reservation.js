@@ -7,17 +7,18 @@ function Reservation({
   mobile_number,
   reservation_time,
   people,
+  status = null,
 }) {
-  //TODO apply dynamic logic
-  let status = "seated";
+  //TODO incoming "status" prop needs logic still
+  let displayStatus = status || "booked";
 
   const statusIndicators = {
-    booked: "warning",
+    booked: "danger",
     seated: "success",
     finished: "muted",
   };
 
-  const statusIndicator = statusIndicators[status];
+  const statusIndicator = statusIndicators[displayStatus];
 
   return (
     <>
@@ -37,7 +38,7 @@ function Reservation({
         </a>
       </div>
       <div className={`card-footer text-${statusIndicator}`}>
-        Status: {status}
+        Status: {displayStatus}
       </div>
     </>
   );

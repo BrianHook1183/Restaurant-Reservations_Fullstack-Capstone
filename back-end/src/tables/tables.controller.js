@@ -54,7 +54,7 @@ function hasValidValues(req, res, next) {
   if (!tableNameIsValid(table_name)) {
     return next({
       status: 400,
-      message: "table name must be more than one character",
+      message: "table_name must be more than one character",
     });
   }
   /* 

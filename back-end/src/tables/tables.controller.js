@@ -24,15 +24,19 @@ function hasOnlyValidProperties(req, res, next) {
 
 const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 
-// TODO depending on what tests are looking for, this is a possible table name validation
+// TODO possible table name validation not required in tests or user stories
 /* 
 // ends in a # and a digit like "#5"
 const tableNameFormat = /#(?=\d$)/;
 
-function tableNameIsValid(tableName) {
+function tableNameIsBestPractice(tableName) {
   return tableName.match(tableNameFormat)?.[0];
 }
  */
+
+function tableNameIsValid(tableName) {
+  return tableName.length > 1;
+}
 
 function capacityIsValid(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
@@ -47,11 +51,17 @@ function hasValidValues(req, res, next) {
       message: "capacity must be a whole number greater than or equal to 1",
     });
   }
-  /* 
   if (!tableNameIsValid(table_name)) {
     return next({
       status: 400,
-      message: "table name must end with a # and a number (eg: #5 or #27)",
+      message: "table name must be more than one character",
+    });
+  }
+  /* 
+  if (!tableNameIsBestPractice(table_name)) {
+    return next({
+      status: 400,
+      message: "table name should end with a # and a number (eg: #5 or #27)",
     });
   }
  */

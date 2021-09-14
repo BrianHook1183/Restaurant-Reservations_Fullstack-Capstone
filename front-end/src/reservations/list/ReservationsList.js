@@ -23,7 +23,7 @@ function ReservationsList({ reservations }) {
   // if reservationsList is null/undefined, will not render, until there is a reservations array with at least 1 reservation
   return (
     <div className="row row-cols-1 row-cols-md-3">
-      {reservationsList ?? <li>No reservations on this date</li>}
+      {reservationsList ?? "(...no reservations on this date)"}
     </div>
   );
 }

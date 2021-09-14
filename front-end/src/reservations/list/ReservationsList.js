@@ -6,7 +6,7 @@ function ReservationsList({ reservations }) {
 
   if (reservations.length) {
     reservationsList = reservations.map((reservation, index) => (
-      <li key={index}>
+      <div className="card text-center" key={index}>
         <Reservation
           reservation_id={reservation.reservation_id}
           reservation_date={reservation.date}
@@ -16,12 +16,16 @@ function ReservationsList({ reservations }) {
           reservation_time={reservation.reservation_time}
           people={reservation.people}
         />
-      </li>
+      </div>
     ));
   }
 
   // if reservationsList is null/undefined, will not render, until there is a reservations array with at least 1 reservation
-  return <ul>{reservationsList ?? <li>No reservations on this date</li>}</ul>;
+  return (
+    <div className="row row-cols-1 row-cols-md-3">
+      {reservationsList ?? <li>No reservations on this date</li>}
+    </div>
+  );
 }
 
 export default ReservationsList;

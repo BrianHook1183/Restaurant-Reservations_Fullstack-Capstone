@@ -61,16 +61,12 @@ function hasValidValues(req, res, next) {
 //! Validation ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //* CRUD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-//TODO WIll tables need a list function? here is the one for reservations for reference
-/* 
 async function list(req, res) {
-  const { date } = req.query;
-  const reservations = await service.list(date);
-  res.locals.data = reservations;
+  const tables = await service.list();
+  res.locals.data = tables;
   const { data } = res.locals;
   res.json({ data: data });
 }
- */
 
 // Create handler for a new table
 async function create(req, res) {
@@ -87,5 +83,5 @@ module.exports = {
     hasValidValues,
     asyncErrorBoundary(create),
   ],
-  // list: asyncErrorBoundary(list),
+  list: asyncErrorBoundary(list),
 };

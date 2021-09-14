@@ -9,7 +9,7 @@ const controller = require("./tables.controller");
 
 router
   .route("/")
-  // .get(controller.list)
+  .get(controller.list)
   .post(controller.create);
 
 module.exports = router;

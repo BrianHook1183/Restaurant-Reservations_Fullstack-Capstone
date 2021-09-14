@@ -24,7 +24,17 @@ function hasOnlyValidProperties(req, res, next) {
 
 const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
 
-// TODO possible table name validation not required in tests or user stories
+function tableNameIsValid(tableName) {
+  return tableName.length > 1;
+}
+
+function capacityIsValid(capacity) {
+  return Number.isInteger(capacity) && capacity >= 1;
+}
+
+//TODO table_name should have to be unique. Can currently post "#5" twice. Can validate here or in migration.
+
+//TODO possible table name validation not required in tests or user stories
 /* 
 // ends in a # and a digit like "#5"
 const tableNameFormat = /#(?=\d$)/;
@@ -33,14 +43,6 @@ function tableNameIsBestPractice(tableName) {
   return tableName.match(tableNameFormat)?.[0];
 }
  */
-
-function tableNameIsValid(tableName) {
-  return tableName.length > 1;
-}
-
-function capacityIsValid(capacity) {
-  return Number.isInteger(capacity) && capacity >= 1;
-}
 
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;

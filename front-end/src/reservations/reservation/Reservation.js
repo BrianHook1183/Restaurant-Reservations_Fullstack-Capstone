@@ -16,6 +16,9 @@ function Reservation({
       <p>
         Contact Details for {first_name} {last_name}: {mobile_number}
       </p>
+      <a href={`/reservations/${reservation_id}/seat`}>
+        <button>Seat</button>
+      </a>
     </>
   );
 }

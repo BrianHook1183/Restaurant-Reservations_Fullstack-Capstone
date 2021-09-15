@@ -29,7 +29,7 @@ function Dashboard({ date }) {
   const [tablesError, setTablesError] = useState(null);
 
   //TODO check if using [tables] here is best practice. it is currently clearing a "useEffect has a missing dependency" console warning
-  useEffect(loadDashboard, [date, tables]);
+  useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -43,12 +43,11 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
 
     // listTables only runs on initial loadDashboard() or if tables is empty.
-    if (!tables.length) {
+
       listTables(abortController.signal)
         .then(setTables)
         .then(console.log("listTables() ran from loadDashboard()"))
         .catch(setTablesError);
-    }
 
     return () => abortController.abort();
   }

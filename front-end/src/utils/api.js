@@ -68,13 +68,20 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function readReservation(id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${id}`);
+
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
 /**
  * Posts a new reservation
  */
 
 export async function postReservation(reservationDetails, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  // console.log(`url for api POST is ${url}`);
   const options = {
     method: "POST",
     headers,

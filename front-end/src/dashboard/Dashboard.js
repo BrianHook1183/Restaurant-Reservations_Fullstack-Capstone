@@ -28,26 +28,30 @@ function Dashboard({ date }) {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
 
-  //TODO check if using [tables] here is best practice. it is currently clearing a "useEffect has a missing dependency" console warning
-  useEffect(loadDashboard, [date]);
+  useEffect(loadReservations, [date]);
+  useEffect(loadTables, []);
 
-  function loadDashboard() {
+  function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
-    setTablesError(null);
 
     // listReservations will run every time {date} changes
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .then(console.log("listReservations() ran from loadDashboard()"))
+      .then(console.log("listReservations/API ran from loadReservations()"))
       .catch(setReservationsError);
 
-    // listTables only runs on initial loadDashboard() or if tables is empty.
+    return () => abortController.abort();
+  }
 
-      listTables(abortController.signal)
-        .then(setTables)
-        .then(console.log("listTables() ran from loadDashboard()"))
-        .catch(setTablesError);
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+
+    listTables(abortController.signal)
+      .then(setTables)
+      .then(console.log("listTables/API ran from loadTables()"))
+      .catch(setTablesError);
 
     return () => abortController.abort();
   }

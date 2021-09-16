@@ -12,7 +12,7 @@ function Seat() {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
 
-  // load all tables
+  // load all tables for dropdown form
   useEffect(() => {
     const abortController = new AbortController();
     setTablesError(null);
@@ -24,9 +24,6 @@ function Seat() {
 
     return () => abortController.abort();
   }, []);
-
-  //! dev only
-  console.log(tables);
 
   const initialFormState = {
     table_id: "",
@@ -70,7 +67,7 @@ function Seat() {
 
   return (
     <section>
-      <h1>Assign Table (reservation {reservation_id})</h1>
+      <h1>Assign Reservation {reservation_id} to a Table</h1>
       <ErrorAlert error={tablesError} />
       <form onSubmit={handleSubmit}>
         <label htmlFor="table_id">Table: </label>

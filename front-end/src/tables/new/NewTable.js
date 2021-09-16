@@ -54,7 +54,7 @@ function NewTable() {
 
   const handleCancel = (event) => {
     event.preventDefault();
-    // cancelling a new reservation while in progress sends user back to previous page.
+    // cancelling a new table while in progress sends user back to previous page.
     history.goBack();
   };
 

@@ -8,6 +8,13 @@ function list(date) {
     .orderBy("reservation_time");
 }
 
+// returns a reservation for the specified id
+function read(id) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id: id });
+}
+
 // posts new reservation and then returns it
 function create(reservation) {
   return knex("reservations")
@@ -19,4 +26,5 @@ function create(reservation) {
 module.exports = {
   list,
   create,
+  read,
 };

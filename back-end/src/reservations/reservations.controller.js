@@ -115,6 +115,15 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
+// Read handler for reservation resources
+async function read(req, res) {
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
+  res.locals.data = reservation;
+  const { data } = res.locals;
+  res.json({ data: data });
+}
+
 // Create handler for a new reservation
 async function create(req, res) {
   const data = await service.create(req.body.data);
@@ -131,4 +140,5 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   list: asyncErrorBoundary(list),
+  read: asyncErrorBoundary(read),
 };

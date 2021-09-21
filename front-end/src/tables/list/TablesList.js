@@ -8,20 +8,13 @@ function TablesList({ tables }) {
     tablesList = tables.map((table, index) => (
       <div className="col mb-4" key={index}>
         <div className="card h-100">
-          <div className="card-body">
-            <Table
-              name={table.table_name}
-              capacity={table.capacity}
-              status={table.reservation_id}
-              id={table.table_id}
-            />
-          </div>
+          <Table table={table} />
         </div>
       </div>
     ));
   }
 
-  // if tablesList is null/undefined, will not render, until there is a tabes array with at least 1 table
+  // if tablesList is null/undefined, will not render, until there is a tables array with at least 1 table
   return (
     <div className="row row-cols-1 row-cols-md-3">
       {tablesList ?? <li>loading tables...</li>}

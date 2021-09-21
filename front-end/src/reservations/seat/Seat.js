@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
-import { listTables, assignToTable } from "../../utils/api";
+import { listTables, assignToTable, getReservation } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function Seat() {
@@ -9,31 +9,55 @@ function Seat() {
   const history = useHistory();
   const [assignTableError, setAssignTableError] = useState(null);
 
-  const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
+  const [allTables, setAllTables] = useState([]);
+  const [allTablesError, setAllTablesError] = useState(null);
 
-  // load all tables for dropdown form
+  const [formData, setFormData] = useState({ table_id: null });
+
+  const [reservationDetails, setReservationDetails] = useState([]);
+  const [reservationError, setReservationError] = useState(null);
+
+  // unused function, saving for later
+  /* 
+    const findTableById = allTables.find(
+      (table) => +table.table_id === +formData.table_id
+    );
+*/
+
+  // load all tables for dropdown options
   useEffect(() => {
     const abortController = new AbortController();
-    setTablesError(null);
+    setAllTablesError(null);
 
     listTables(abortController.signal)
-      .then(setTables)
-      .then(console.log("Seat ran listTables()"))
-      .catch(setTablesError);
+      .then(setAllTables)
+      .catch(setAllTablesError);
 
     return () => abortController.abort();
   }, []);
 
-  const initialFormState = {
-    table_id: "",
-  };
+  // load reservationDetails from url param
+  useEffect(() => {
+    const abortController = new AbortController();
+    setReservationError(null);
 
-  const [formData, setFormData] = useState({ ...initialFormState });
+    getReservation(reservation_id, abortController.signal)
+      .then(setReservationDetails)
+      // .then(console.log("Seat ran getReservation(). People is ", reservationDetails.data.people))
+      .catch(setReservationError);
 
-  const handleChange = ({ target }) => {
-    setFormData({ [target.name]: target.value });
-  };
+    return () => abortController.abort();
+  }, [reservation_id]);
+
+  /*   const handleChange = ({ target }) => {
+    // Fixes issue of *people* changing into a string
+    // if (target.name === "table_id" && typeof value === "string") {
+    //   value = +value;
+    // }
+    setFormData({
+      [target.name]: target.value,
+    });
+  }; */
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,14 +65,24 @@ function Seat() {
     setAssignTableError(null);
 
     assignToTable(reservation_id, formData.table_id, abortController.signal)
-      .then(
-        console.log(
-          `SEAT reservation ${reservation_id} was assigned to table ${formData.table_id}`
-        )
-      )
       .then(() => history.push(`/dashboard`))
       .catch(setAssignTableError);
     return () => abortController.abort();
+    // setAssignTableError({ message: "party size is too big for this table!" });
+
+    /* 
+    try {
+      await assignToTable(
+        reservation_id,
+        formData.table_id,
+        abortController.signal
+      );
+      history.push("/dashboard");
+    } catch (assignError) {
+      setAssignTableError([assignError]);
+    }
+    return () => abortController.abort();
+     */
   };
 
   const handleCancel = (event) => {
@@ -57,23 +91,24 @@ function Seat() {
     history.goBack();
   };
 
-  const tableOptions = tables.map((table) => {
-    return (
-      <option key={table.table_id} value={table.table_id}>
-        {table.table_name} - {table.capacity}
-      </option>
-    );
-  });
-
   return (
     <section>
-      <h1>Assign Reservation {reservation_id} to a Table</h1>
-      <ErrorAlert error={tablesError} />
+      <h1>Assign Party of {reservationDetails.people} to a Table</h1>
+      <ErrorAlert error={allTablesError} />
+      <ErrorAlert error={reservationError} />
       <form onSubmit={handleSubmit}>
         <label htmlFor="table_id">Table: </label>
-        <select name="table_id" onChange={handleChange} required={true}>
+        <select
+          name="table_id"
+          onChange={(e) => setFormData({ [e.target.name]: e.target.value })}
+          required={true}
+        >
           <option defaultValue>Table - Capacity</option>
-          {tableOptions}
+          {allTables.map(({ table_id, table_name, capacity }) => (
+            <option key={table_id} value={table_id}>
+              {table_name} - {capacity}
+            </option>
+          ))}
         </select>
 
         <button type="submit">Submit</button>

@@ -1,21 +1,22 @@
 import React from "react";
 
-function Table({ name, capacity, status, id }) {
+function Table({ table }) {
+  const { table_name, table_id, capacity } = table;
+  const status = table.reservation_id;
   return (
-    <>
-      <h5 className="card-title">Table {name}</h5>
+    <div className="card-body">
+      <h5 className="card-title">Table {table_name}</h5>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">Capacity: {capacity}</li>
         <li className="list-group-item">
-          <div
-            className={`bg-${status ? "danger" : "success"}`}
-            data-table-id-status={`${id}`}
-          >
-            <h6 className="text-center">{status ? "Occupied" : "Free"}</h6>
+          <div className={`bg-${status ? "danger" : "success"}`}>
+            <h6 className="text-center" data-table-id-status={table_id}>
+              {status ? "Occupied" : "Free"}
+            </h6>
           </div>
         </li>
       </ul>
-    </>
+    </div>
   );
 }
 

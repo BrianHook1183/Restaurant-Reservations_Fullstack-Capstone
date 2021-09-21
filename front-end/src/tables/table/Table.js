@@ -3,6 +3,7 @@ import React from "react";
 function Table({ table }) {
   const { table_name, table_id, capacity } = table;
   const status = table.reservation_id;
+
   return (
     <div className="card-body">
       <h5 className="card-title">Table {table_name}</h5>

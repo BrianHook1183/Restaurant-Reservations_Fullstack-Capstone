@@ -17,13 +17,6 @@ function Seat() {
   const [reservationDetails, setReservationDetails] = useState([]);
   const [reservationError, setReservationError] = useState(null);
 
-  // unused function, saving for later
-  /* 
-    const findTableById = allTables.find(
-      (table) => +table.table_id === +formData.table_id
-    );
-*/
-
   // load all tables for dropdown options
   useEffect(() => {
     const abortController = new AbortController();
@@ -43,21 +36,10 @@ function Seat() {
 
     getReservation(reservation_id, abortController.signal)
       .then(setReservationDetails)
-      // .then(console.log("Seat ran getReservation(). People is ", reservationDetails.data.people))
       .catch(setReservationError);
 
     return () => abortController.abort();
   }, [reservation_id]);
-
-  /*   const handleChange = ({ target }) => {
-    // Fixes issue of *people* changing into a string
-    // if (target.name === "table_id" && typeof value === "string") {
-    //   value = +value;
-    // }
-    setFormData({
-      [target.name]: target.value,
-    });
-  }; */
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -68,21 +50,6 @@ function Seat() {
       .then(() => history.push(`/dashboard`))
       .catch(setAssignTableError);
     return () => abortController.abort();
-    // setAssignTableError({ message: "party size is too big for this table!" });
-
-    /* 
-    try {
-      await assignToTable(
-        reservation_id,
-        formData.table_id,
-        abortController.signal
-      );
-      history.push("/dashboard");
-    } catch (assignError) {
-      setAssignTableError([assignError]);
-    }
-    return () => abortController.abort();
-     */
   };
 
   const handleCancel = (event) => {

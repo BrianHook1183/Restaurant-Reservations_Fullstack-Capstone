@@ -7,12 +7,12 @@ import Form from "../form/Form";
 
 function New() {
   return (
-    <main>
+    <section>
       <div className="d-md-flex mb-3">
         <h1 className="mb-0">Make a Reservation</h1>
       </div>
       <Form />
-    </main>
+    </section>
   );
 }
 

@@ -4,6 +4,19 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
+async function reservationExists(req, res, next) {
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `Reservation with id: ${reservationId} was not found`,
+  });
+}
+
 const VALID_PROPERTIES = [
   "first_name",
   "last_name",
@@ -115,6 +128,13 @@ async function list(req, res) {
   res.json({ data: data });
 }
 
+// Read handler for reservation resources
+async function read(req, res) {
+  //* res.locals.reservation is being set from reservationExists()
+  const { reservation } = res.locals;
+  res.json({ data: reservation });
+}
+
 // Create handler for a new reservation
 async function create(req, res) {
   const data = await service.create(req.body.data);
@@ -131,4 +151,5 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   list: asyncErrorBoundary(list),
+  read: [reservationExists, asyncErrorBoundary(read)],
 };

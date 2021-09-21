@@ -2,13 +2,12 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import Reservations from "../reservations/Reservations";
+import Tables from "../tables/Tables";
 import { today } from "../utils/date-time";
 import NotFound from "./NotFound";
 
 /**
  * Defines all the routes for the application.
- *
- * You will need to make changes to this file.
  *
  * @returns {JSX.Element}
  */
@@ -24,6 +23,9 @@ function Routes() {
       </Route>
       <Route path="/reservations">
         <Reservations />
+      </Route>
+      <Route path="/tables">
+        <Tables />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />

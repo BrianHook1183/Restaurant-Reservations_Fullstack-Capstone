@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import New from "./new/New";
 import NotFound from "../layout/NotFound";
-// import Seat from "./seat/Seat";
+import Seat from "./seat/Seat";
 // import Status from "./status/Status";
 // import Edit from "./edit/Edit";
 
@@ -12,22 +12,21 @@ import NotFound from "../layout/NotFound";
 
 // TODO
 /* 
- US-04 = /reservations/:reservation_id/seat
  US-06 = /reservations/:reservation_id/status
  US-08 = /reservations/:reservation_id/edit
  */
 
 function Reservations() {
   return (
-    <section>
+    <main>
       <Switch>
         <Route path={"/reservations/new"}>
           <New />
         </Route>
-        {/* <Route path={"/:reservation_id/seat"}>
+        <Route path={"/reservations/:reservation_id/seat"}>
           <Seat />
         </Route>
-        <Route path={"/:reservation_id/status"}>
+        {/*<Route path={"/:reservation_id/status"}>
           <Edit />
         </Route>
         <Route path={"/:reservation_id/edit"}>
@@ -37,7 +36,7 @@ function Reservations() {
           <NotFound />
         </Route>
       </Switch>
-    </section>
+    </main>
   );
 }
 

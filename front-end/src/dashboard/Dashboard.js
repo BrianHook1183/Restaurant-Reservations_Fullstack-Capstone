@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import formatDisplayDate from "../utils/format-display-date";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
+import TablesList from "../tables/list/TablesList";
 
 /**
  * Defines the dashboard page.
@@ -24,14 +25,34 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
-  function loadDashboard() {
+  useEffect(loadReservations, [date]);
+  useEffect(loadTables, []);
+
+  function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
+
+    // listReservations will run every time {date} changes
     listReservations({ date }, abortController.signal)
       .then(setReservations)
+      .then(console.log("listReservations/API ran from loadReservations()"))
       .catch(setReservationsError);
+
+    return () => abortController.abort();
+  }
+
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+
+    listTables(abortController.signal)
+      .then(setTables)
+      .then(console.log("listTables/API ran from loadTables()"))
+      .catch(setTablesError);
+
     return () => abortController.abort();
   }
 
@@ -42,13 +63,17 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for: {displayDateLong}</h4>
-        <DateNavigation date={date} />
-      </div>
+      {/* <h1>Dashboard</h1> */}
+      {/* <div className="d-md-flex mb-3"> */}
+      <h4>{displayDateLong}</h4>
+      <DateNavigation date={date} />
+      {/* </div> */}
+      <h2 className="mb-0">Reservations:</h2>
       <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />
+      <h2 className="mb-0">Tables:</h2>
+      <TablesList tables={tables} />
+      <ErrorAlert error={tablesError} />
     </main>
   );
 }

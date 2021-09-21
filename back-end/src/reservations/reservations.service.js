@@ -12,7 +12,8 @@ function list(date) {
 function read(id) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: id });
+    .where({ reservation_id: id })
+    .then((result) => result[0]);
 }
 
 // posts new reservation and then returns it

@@ -13,6 +13,14 @@ function create(table) {
     .then((newTables) => newTables[0]);
 }
 
+// returns a reservation for the specified id
+function read(id) {
+  return knex("tables")
+    .select("*")
+    .where({ table_id: id })
+    .then((result) => result[0]);
+}
+
 // updates table after being assigned a reservation
 function update(updatedTable) {
   return knex("tables")
@@ -24,6 +32,7 @@ function update(updatedTable) {
 
 module.exports = {
   list,
+  read,
   create,
   update,
 };

@@ -34,19 +34,11 @@ function NewTable() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(
-      `will POST table ${formData.table_name}, capacity: ${formData.capacity}`
-    );
 
     const abortController = new AbortController();
     setTablesError(null);
 
     postTable(formData, abortController.signal)
-      .then(
-        console.log(
-          `POSTed table ${formData.table_name}, capacity: ${formData.capacity}`
-        )
-      )
       .then(() => history.push(`/dashboard`))
       .catch(setTablesError);
     return () => abortController.abort();

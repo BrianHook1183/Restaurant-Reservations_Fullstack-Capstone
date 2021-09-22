@@ -9,7 +9,7 @@ function Reservation({
   people,
   status = null,
 }) {
-  //TODO incoming "status" prop needs logic still
+  //TODO us-06: incoming "status" prop needs to be dynamic
   let displayStatus = status || "booked";
 
   const statusIndicators = {

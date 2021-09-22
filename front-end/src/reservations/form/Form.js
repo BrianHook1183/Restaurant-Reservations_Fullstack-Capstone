@@ -43,7 +43,6 @@ function Form() {
     setReservationsError(null);
 
     postReservation(formData, abortController.signal)
-      .then(console.log("posted reservation for", formData.first_name))
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(setReservationsError);
     return () => abortController.abort();

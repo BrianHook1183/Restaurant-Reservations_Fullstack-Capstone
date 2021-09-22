@@ -57,7 +57,7 @@ function Seat() {
     // cancelling a table assignment while in progress sends user back to previous page.
     history.goBack();
   };
-
+  //TODO style dropdown https://getbootstrap.com/docs/4.0/components/dropdowns/
   return (
     <section>
       <h1>Assign Party of {reservationDetails.people} to a Table</h1>
@@ -78,8 +78,15 @@ function Seat() {
           ))}
         </select>
 
-        <button type="submit">Submit</button>
-        <button type="button" value="Cancel" onClick={handleCancel}>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+        <button
+          type="button"
+          className="btn btn-light"
+          value="Cancel"
+          onClick={handleCancel}
+        >
           Cancel
         </button>
       </form>

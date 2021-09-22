@@ -38,7 +38,6 @@ function Dashboard({ date }) {
     // listReservations will run every time {date} changes
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .then(console.log("listReservations/API ran from loadReservations()"))
       .catch(setReservationsError);
 
     return () => abortController.abort();
@@ -48,10 +47,7 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setTablesError(null);
 
-    listTables(abortController.signal)
-      .then(setTables)
-      .then(console.log("listTables/API ran from loadTables()"))
-      .catch(setTablesError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
 
     return () => abortController.abort();
   }
@@ -63,11 +59,8 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      {/* <h1>Dashboard</h1> */}
-      {/* <div className="d-md-flex mb-3"> */}
       <h4>{displayDateLong}</h4>
       <DateNavigation date={date} />
-      {/* </div> */}
       <h2 className="mb-0">Reservations:</h2>
       <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />

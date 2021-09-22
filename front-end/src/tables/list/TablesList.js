@@ -7,7 +7,11 @@ function TablesList({ tables }) {
   if (tables.length) {
     tablesList = tables.map((table, index) => (
       <div className="col mb-4" key={index}>
-        <div className="card h-100">
+        <div
+          className={`card h-100 border-${
+            table.reservation_id ? "dark" : "primary"
+          }`}
+        >
           <Table table={table} />
         </div>
       </div>

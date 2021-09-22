@@ -101,7 +101,6 @@ export async function listTables(signal) {
  */
 export async function postTable(tableDetails, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  console.log(`API postTable- url is ${url}`);
   const options = {
     method: "POST",
     headers,
@@ -116,13 +115,23 @@ export async function postTable(tableDetails, signal) {
  */
 export async function assignToTable(reservation_id, table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
-  console.log(
-    `API assignToTable- reservation id ${reservation_id} was assigned to table id ${table_id}`
-  );
   const options = {
     method: "PUT",
     headers,
     body: JSON.stringify({ data: { reservation_id } }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
+ * Removes reservation_id from a table, which changes table from "Occupied" to "Free"
+ */
+export async function finishTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    method: "DELETE",
+    headers,
     signal,
   };
   return await fetchJson(url, options);

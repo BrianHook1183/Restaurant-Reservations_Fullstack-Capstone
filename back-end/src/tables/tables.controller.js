@@ -63,11 +63,46 @@ function tableIsFree(req, res, next) {
   });
 }
 
-const VALID_PROPERTIES = ["table_name", "capacity"];
+function occupyTable(req, res, next) {
+  const { table } = res.locals;
+  const { reservation_id } = req.body.data;
+  table.reservation_id = reservation_id;
+  if (table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table with id: ${table.table_id} could not be assigned reservation id ${table.reservation_id}  for some reason. Please contact backend engineer for assistance`,
+  });
+}
+
+function tableIsOccupied(req, res, next) {
+  const { table } = res.locals;
+  if (table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table with id: ${table.table_id} is not occupied`,
+  });
+}
+
+function deOccupyTable(req, res, next) {
+  const { table } = res.locals;
+  table.reservation_id = null;
+  if (!table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table with id: ${table.table_id} could not remove reservation id ${table.reservation_id}  for some reason. Please contact backend engineer for assistance`,
+  });
+}
+
+const VALID_PROPERTIES = ["table_name", "capacity", "reservation_id"];
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
-
   const invalidFields = Object.keys(data).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
@@ -81,9 +116,9 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
-const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
+const hasRequiredProperties = hasProperties(...["table_name", "capacity"]);
 
-//TODO table_name should have to be unique. Can currently post "#5" twice. Can validate here or in migration.
+//TODO table_name should have to be unique. Can currently post "#5" twice.
 
 function tableNameIsValid(tableName) {
   return tableName.length > 1;
@@ -92,16 +127,6 @@ function tableNameIsValid(tableName) {
 function capacityIsValid(capacity) {
   return Number.isInteger(capacity) && capacity >= 1;
 }
-
-//TODO possible table name validation not required in tests or user stories
-/* 
-// ends in a # and a digit like "#5"
-const tableNameFormat = /#(?=\d$)/;
-
-function tableNameIsBestPractice(tableName) {
-  return tableName.match(tableNameFormat)?.[0];
-}
- */
 
 function hasValidValues(req, res, next) {
   const { table_name, capacity } = req.body.data;
@@ -118,19 +143,11 @@ function hasValidValues(req, res, next) {
       message: "table_name must be more than one character",
     });
   }
-  /* 
-  if (!tableNameIsBestPractice(table_name)) {
-    return next({
-      status: 400,
-      message: "table name should end with a # and a number (eg: #5 or #27)",
-    });
-  }
- */
   next();
 }
 
 //! Validation ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-//* CRUD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+//* CRUDL vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 async function list(req, res) {
   const tables = await service.list();
@@ -152,19 +169,15 @@ async function read(req, res) {
   res.json({ data: table });
 }
 
-// update handler for assigning a reservation to a table
+// update handler for either assigning or removing a reservation from a table
 async function update(req, res) {
   const { table } = res.locals;
-  const { reservation_id } = req.body.data;
-  const updatedTable = {
-    ...table,
-    reservation_id,
-  };
+  const updatedTable = { ...table };
   const data = await service.update(updatedTable);
   res.json({ data });
 }
 
-//! CRUD ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+//! CRUDL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 module.exports = {
   create: [
@@ -175,12 +188,20 @@ module.exports = {
   ],
   read: [tableExists, asyncErrorBoundary(read)],
   list: asyncErrorBoundary(list),
-  update: [
+  assignReservationId: [
     hasReservationId,
     reservationExists,
     tableExists,
     tableIsBigEnough,
     tableIsFree,
+    occupyTable,
     asyncErrorBoundary(update),
   ],
+  deleteReservationId: [
+    tableExists,
+    tableIsOccupied,
+    deOccupyTable,
+    asyncErrorBoundary(update),
+  ],
+  list: asyncErrorBoundary(list),
 };

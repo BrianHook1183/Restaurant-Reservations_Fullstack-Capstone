@@ -20,7 +20,7 @@ function TablesList({ tables }) {
 
   // if tablesList is null/undefined, will not render, until there is a tables array with at least 1 table
   return (
-    <div id="app-modal" className="row row-cols-1 row-cols-md-3">
+    <div className="row row-cols-1 row-cols-md-3">
       {tablesList ?? <li>loading tables...</li>}
     </div>
   );

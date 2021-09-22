@@ -1,15 +1,30 @@
 import React, { useState } from "react";
-import FinishTableModal from "../modals/FinishTableModal";
+import { useHistory } from "react-router-dom";
+import { finishTable } from "../../utils/api";
+import ErrorAlert from "../../layout/ErrorAlert";
 
 function Table({ table }) {
   const { table_name, table_id, capacity } = table;
   const occupied = table.reservation_id;
 
-  const [modalStatus, setModalStatus] = useState(false);
+  const history = useHistory();
+  const [finishTableError, setFinishTableError] = useState(null);
 
-  const displayModal = (event) => {
-    event.preventDefault();
-    setModalStatus(true);
+  const confirmFinish = () => {
+    if (
+      window.confirm(
+        "Is this table ready to seat new guests? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      setFinishTableError(null);
+
+      finishTable(table_id, abortController.signal)
+        // history.go(0) refreshes the current page (should be /dashboard) so that tables effect hook reloads
+        .then(() => history.go(0))
+        .catch(setFinishTableError);
+      return () => abortController.abort();
+    }
   };
 
   let finish = null;
@@ -18,7 +33,7 @@ function Table({ table }) {
       <button
         className="btn btn-primary"
         data-table-id-finish={`${table_id}`}
-        onClick={displayModal}
+        onClick={confirmFinish}
       >
         Finish
       </button>
@@ -34,16 +49,12 @@ function Table({ table }) {
           <div className={`bg-${occupied ? "light" : "success"}`}>
             <h6 className="text-center" data-table-id-status={`${table_id}`}>
               {occupied ? "occupied" : "free"}
+              <ErrorAlert error={finishTableError} />
             </h6>
           </div>
         </li>
         <li className="list-group-item">
           <h6 className="text-center">{finish}</h6>
-          <FinishTableModal
-            modalStatus={modalStatus}
-            setModalStatus={setModalStatus}
-            tableId={table_id}
-          />
         </li>
       </ul>
     </div>

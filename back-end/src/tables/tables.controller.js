@@ -63,6 +63,19 @@ function tableIsFree(req, res, next) {
   });
 }
 
+function occupyTable(req, res, next) {
+  const { table } = res.locals;
+  const { reservation_id } = req.body.data;
+  table.reservation_id = reservation_id;
+  if (table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table with id: ${table.table_id} could not be assigned reservation id ${table.reservation_id}  for some reason. Please contact backend engineer for assistance`,
+  });
+}
+
 function tableIsOccupied(req, res, next) {
   const { table } = res.locals;
   if (table.reservation_id) {
@@ -71,6 +84,18 @@ function tableIsOccupied(req, res, next) {
   next({
     status: 400,
     message: `Table with id: ${table.table_id} is not occupied`,
+  });
+}
+
+function deOccupyTable(req, res, next) {
+  const { table } = res.locals;
+  table.reservation_id = null;
+  if (!table.reservation_id) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Table with id: ${table.table_id} could not remove reservation id ${table.reservation_id}  for some reason. Please contact backend engineer for assistance`,
   });
 }
 
@@ -144,31 +169,12 @@ async function read(req, res) {
   res.json({ data: table });
 }
 
-// update handler for assigning a reservation to a table
+// update handler for either assigning or removing a reservation from a table
 async function update(req, res) {
   const { table } = res.locals;
-  const { reservation_id } = req.body.data;
-  const assignedTable = {
-    ...table,
-    reservation_id,
-  };
-  const data = await service.update(assignedTable);
+  const updatedTable = { ...table };
+  const data = await service.update(updatedTable);
   res.json({ data });
-}
-
-//TODO idea: setFree can have its own validations and then just piggy back on update(req, res) - would just need logic for res_id or not.
-// handler for removing a reservation from a table thereby changing it from "Occupied" to "Free"
-async function setFree(req, res) {
-  console.log("controller.setFree() ran");
-  const { table } = res.locals;
-  const releasedTable = {
-    ...table,
-    reservation_id: null,
-  };
-  console.log("releasedTable:", releasedTable);
-  const data = await service.update(releasedTable);
-  res.json({ data, status: `Table ${table.table_id} is now free` });
-  // res.json({ data });
 }
 
 //! CRUDL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -182,15 +188,20 @@ module.exports = {
   ],
   read: [tableExists, asyncErrorBoundary(read)],
   list: asyncErrorBoundary(list),
-  update: [
+  assignReservationId: [
     hasReservationId,
     reservationExists,
     tableExists,
     tableIsBigEnough,
     tableIsFree,
+    occupyTable,
     asyncErrorBoundary(update),
   ],
-  // TODO idea: setFree can have its own validations and then still use asyncErrorBoundary(update)
-  setFree: [tableExists, tableIsOccupied, asyncErrorBoundary(setFree)],
+  deleteReservationId: [
+    tableExists,
+    tableIsOccupied,
+    deOccupyTable,
+    asyncErrorBoundary(update),
+  ],
   list: asyncErrorBoundary(list),
 };

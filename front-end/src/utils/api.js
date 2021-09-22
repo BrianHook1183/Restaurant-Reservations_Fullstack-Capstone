@@ -127,3 +127,17 @@ export async function assignToTable(reservation_id, table_id, signal) {
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * Removes reservation_id from a table, which changes table from "Occupied" to "Free"
+ */
+export async function finishTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  console.log(`API finishTable- table id ${table_id} was marked as "finished"`);
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}

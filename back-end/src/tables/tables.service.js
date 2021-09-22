@@ -31,8 +31,8 @@ function update(updatedTable) {
 }
 
 module.exports = {
-  list,
-  read,
   create,
+  read,
   update,
+  list,
 };

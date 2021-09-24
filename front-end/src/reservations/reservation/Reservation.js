@@ -9,7 +9,6 @@ function Reservation({
   people,
   status = null,
 }) {
-  //TODO us-06: incoming "status" prop needs to be dynamic
   let displayStatus = status || "booked";
 
   const statusIndicators = {
@@ -37,8 +36,14 @@ function Reservation({
           Seat
         </a>
       </div>
-      <div className={`card-footer text-${statusIndicator}`}>
-        Status: {displayStatus}
+      <div className="card-footer">
+        {`Status: `}
+        <span
+          className={`text-${statusIndicator}`}
+          data-reservation-id-status={reservation_id}
+        >
+          {displayStatus}
+        </span>
       </div>
     </>
   );

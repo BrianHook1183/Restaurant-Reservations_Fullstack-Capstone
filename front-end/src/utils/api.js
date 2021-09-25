@@ -125,6 +125,24 @@ export async function assignToTable(reservation_id, table_id, signal) {
 }
 
 /**
+ * Updates a reservation's status
+ */
+export async function updateReservationStatus(
+  reservation_id,
+  newStatus,
+  signal
+) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: newStatus } }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
  * Removes reservation_id from a table, which changes table from "Occupied" to "Free"
  */
 export async function finishTable(table_id, signal) {

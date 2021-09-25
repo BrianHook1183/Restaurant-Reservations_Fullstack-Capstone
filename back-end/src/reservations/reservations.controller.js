@@ -29,14 +29,14 @@ const VALID_PROPERTIES = [
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
 
-  const invalidFields = Object.keys(data).filter(
+  const invalidStatuses = Object.keys(data).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
 
-  if (invalidFields.length) {
+  if (invalidStatuses.length) {
     return next({
       status: 400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`,
+      message: `Invalid field(s): ${invalidStatuses.join(", ")}`,
     });
   }
   next();
@@ -116,6 +116,20 @@ function hasValidValues(req, res, next) {
   next();
 }
 
+function statusIsValid(req, res, next) {
+  const { status } = req.body.data;
+  const VALID_STATUSES = ["seated", "finished", "booked"];
+
+  if (!VALID_STATUSES.includes(status)) {
+    return next({
+      status: 400,
+      message: `${status} is an invalid status`,
+    });
+  }
+
+  next();
+}
+
 //! Validation ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //* CRUD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
@@ -158,7 +172,11 @@ module.exports = {
     hasValidValues,
     asyncErrorBoundary(create),
   ],
-  updateStatus: [reservationExists, asyncErrorBoundary(updateStatus)],
+  updateStatus: [
+    reservationExists,
+    statusIsValid,
+    asyncErrorBoundary(updateStatus),
+  ],
   list: asyncErrorBoundary(list),
   read: [reservationExists, asyncErrorBoundary(read)],
 };

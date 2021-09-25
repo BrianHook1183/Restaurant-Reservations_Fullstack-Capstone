@@ -24,8 +24,16 @@ function create(reservation) {
     .then((newReservations) => newReservations[0]);
 }
 
+// updates reservation status
+function updateStatus(reservation_id, reservation_status) {
+  return knex("reservations")
+    .where({ reservation_id })
+    .update({ reservation_status }, "*");
+}
+
 module.exports = {
   list,
   create,
   read,
+  updateStatus,
 };

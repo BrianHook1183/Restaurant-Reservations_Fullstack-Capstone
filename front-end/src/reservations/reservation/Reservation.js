@@ -48,6 +48,7 @@ function Reservation({ reservation }) {
         >
           {reservation_status}
         </span>
+        <p>(res_id #{reservation_id})</p>
       </div>
     </>
   );

@@ -201,7 +201,7 @@ async function updateStatus(req, res) {
   const newStatus = req.body.data.status;
   const reservationId = res.locals.reservation.reservation_id;
   let data = await service.updateStatus(reservationId, newStatus);
-  res.status(200).json({ status: newStatus });
+  res.status(200).json({ data: { status: newStatus } });
 }
 
 //! CRUD ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

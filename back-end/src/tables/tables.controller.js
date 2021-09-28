@@ -28,6 +28,17 @@ async function reservationExists(req, res, next) {
   });
 }
 
+async function reservationIsBooked(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status !== "seated") {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Reservation is already 'seated'`,
+  });
+}
+
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
   const table = await service.read(table_id);
@@ -196,6 +207,7 @@ module.exports = {
   assignReservationId: [
     hasReservationId,
     reservationExists,
+    reservationIsBooked,
     tableExists,
     tableIsBigEnough,
     tableIsFree,

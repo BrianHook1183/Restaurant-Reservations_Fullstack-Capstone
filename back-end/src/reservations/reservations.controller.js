@@ -138,8 +138,7 @@ function hasValidValues(req, res, next) {
   if (!statusIsBookedOrNull(status)) {
     return next({
       status: 400,
-      message:
-        'If a reservation status is provided, it can only by "booked" - a null value is also accepted',
+      message: '"seated" and "finished" are not valid statuses upon creation',
     });
   }
   next();

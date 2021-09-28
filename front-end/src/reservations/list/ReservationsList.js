@@ -6,8 +6,15 @@ function ReservationsList({ reservations }) {
 
   if (reservations.length) {
     reservationsList = reservations.map((reservation, index) => (
-      <div className="card text-center" key={index}>
-        <Reservation reservation={reservation} />
+      <div className="col mb-4" key={index}>
+        <div
+          className={`card h-100 text-center border-${
+            reservation.reservation_status === "booked" ? "primary" : "dark"
+          }`}
+          key={index}
+        >
+          <Reservation reservation={reservation} />
+        </div>
       </div>
     ));
   }

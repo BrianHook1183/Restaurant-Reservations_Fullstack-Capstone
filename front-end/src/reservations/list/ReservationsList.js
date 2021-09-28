@@ -6,6 +6,7 @@ function ReservationsList({ reservations }) {
   const finishedReservations = [];
 
   // Sorts reservations so only "booked" and "seated" are rendered
+  // TODO finishedReservations are being kept just in case they are needed in future
   reservations.forEach((res) => {
     if (res.reservation_status === "finished") {
       finishedReservations.push(res);

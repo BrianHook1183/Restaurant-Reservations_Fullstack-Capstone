@@ -82,10 +82,16 @@ function dateNotTuesday(dateString) {
   return date.getUTCDay() !== 2;
 }
 
-function statusIsBookedOrNull(reservation_status) {
-  const acceptedStatuses = ["booked", null];
+function statusIsBookedOrNull(status) {
+  const acceptedStatuses = ["booked"];
   // const rejectedStatuses = ["finished", "seated"];
-  return acceptedStatuses.includes(reservation_status);
+  console.log("acceptedStatuses", acceptedStatuses);
+  console.log("supplied status: ", status);
+  if (!status || status === "booked") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function hasValidValues(req, res, next) {
@@ -154,7 +160,7 @@ function statusIsValid(req, res, next) {
 }
 
 function statusNotFinished(req, res, next) {
-  const { status } = res.locals;
+  const { status } = res.locals.reservation;
 
   if (status === "finished") {
     return next({

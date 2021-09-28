@@ -36,7 +36,7 @@ async function update(updatedTable, resId, updatedResStatus) {
 
       const returnedUpdatedReservation = await trx("reservations")
         .where({ reservation_id: resId })
-        .update({ reservation_status: updatedResStatus }, "*")
+        .update({ status: updatedResStatus }, "*")
         .then((updatedReservations) => updatedReservations[0]);
 
       console.log("returnedUpdatedReservation: ", returnedUpdatedReservation);

@@ -25,10 +25,8 @@ function create(reservation) {
 }
 
 // updates reservation status
-function updateStatus(reservation_id, reservation_status) {
-  return knex("reservations")
-    .where({ reservation_id })
-    .update({ reservation_status }, "*");
+function updateStatus(reservation_id, status) {
+  return knex("reservations").where({ reservation_id }).update({ status }, "*");
 }
 
 module.exports = {

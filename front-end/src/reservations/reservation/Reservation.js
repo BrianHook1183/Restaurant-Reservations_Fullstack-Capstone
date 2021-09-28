@@ -8,7 +8,7 @@ function Reservation({ reservation }) {
     mobile_number,
     reservation_time,
     people,
-    reservation_status,
+    status,
   } = reservation;
   const statusStyles = {
     booked: "danger",
@@ -16,10 +16,10 @@ function Reservation({ reservation }) {
     finished: "muted",
   };
 
-  const statusStyle = statusStyles[reservation_status];
+  const statusStyle = statusStyles[status];
 
   const seatBtnIfBooked =
-    reservation_status !== "booked" ? null : (
+    status !== "booked" ? null : (
       <a
         href={`/reservations/${reservation_id}/seat`}
         className="btn btn-primary"
@@ -46,7 +46,7 @@ function Reservation({ reservation }) {
           className={`text-${statusStyle}`}
           data-reservation-id-status={reservation_id}
         >
-          {reservation_status}
+          {status}
         </span>
         <p>(res_id #{reservation_id})</p>
       </div>

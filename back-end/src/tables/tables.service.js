@@ -27,25 +27,25 @@ async function update(updatedTable, resId, updatedResStatus) {
   console.log("resId", resId);
   console.log("updatedResStatus", updatedResStatus);
 
-  // Using trx as a query builder:
-  knex.transaction((trx) => {
-    return trx("tables")
-      .select("*")
-      .where({ table_id: updatedTable.table_id })
-      .update(updatedTable, "*")
-      .then((updatedTables) => updatedTables[0])
-      .then((thisTable) => {
-        return trx("reservations")
-          .select("*")
-          .where({ reservation_id: resId })
-          .update({ reservation_status: updatedResStatus }, "*")
-          .then((updatedReservations) => updatedReservations[0]);
-      })
-      .catch(function (error) {
-        // If we get here, neither the reservation nor table updates have taken place.
-        console.error(error);
-      });
-  });
+  try {
+    await knex.transaction(async (trx) => {
+      const returnedUpdatedTable = await trx("tables")
+        .where({ table_id: updatedTable.table_id })
+        .update(updatedTable, "*")
+        .then((updatedTables) => updatedTables[0]);
+
+      const returnedUpdatedReservation = await trx("reservations")
+        .where({ reservation_id: resId })
+        .update({ reservation_status: updatedResStatus }, "*")
+        .then((updatedReservations) => updatedReservations[0]);
+
+      console.log("returnedUpdatedReservation: ", returnedUpdatedReservation);
+      console.log("returnedUpdatedTable: ", returnedUpdatedTable);
+    });
+  } catch (error) {
+    // If we get here, neither the reservation nor table updates have taken place.
+    console.error(error);
+  }
 }
 
 module.exports = {

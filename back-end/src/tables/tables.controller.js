@@ -93,8 +93,7 @@ function deOccupyTable(req, res, next) {
   const { table } = res.locals;
   res.locals.resId = table.reservation_id;
   table.reservation_id = null;
-  //! "booked" should be "finished" but this helps during dev
-  res.locals.resStatus = "booked";
+  res.locals.resStatus = "finished";
   if (!table.reservation_id) {
     return next();
   }

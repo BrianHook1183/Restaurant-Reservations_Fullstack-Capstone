@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import Reservations from "../reservations/Reservations";
 import Tables from "../tables/Tables";
+import Search from "../search/Search";
 import { today } from "../utils/date-time";
 import NotFound from "./NotFound";
 
@@ -26,6 +27,9 @@ function Routes() {
       </Route>
       <Route path="/tables">
         <Tables />
+      </Route>
+      <Route path="/search">
+        <Search />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />

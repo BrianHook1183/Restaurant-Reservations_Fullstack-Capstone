@@ -5,8 +5,8 @@ function ReservationsList({ reservations }) {
   const currentReservations = [];
   const finishedReservations = [];
 
-  // Sorts reservations so only "booked" and "seated" are rendered
-  // TODO finishedReservations are being kept just in case they are needed in future
+  //  ensures finished reservations do not render
+  //! finishedReservations were being kept just in case they were needed in future ---- but, as of us-06, reservations does not contain any finished reservations anyways
   reservations.forEach((res) => {
     if (res.status === "finished") {
       finishedReservations.push(res);

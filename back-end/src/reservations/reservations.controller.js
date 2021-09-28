@@ -83,10 +83,8 @@ function dateNotTuesday(dateString) {
 }
 
 function statusIsBookedOrNull(status) {
-  const acceptedStatuses = ["booked"];
+  // const acceptedStatuses = ["booked"];
   // const rejectedStatuses = ["finished", "seated"];
-  console.log("acceptedStatuses", acceptedStatuses);
-  console.log("supplied status: ", status);
   if (!status || status === "booked") {
     return true;
   } else {

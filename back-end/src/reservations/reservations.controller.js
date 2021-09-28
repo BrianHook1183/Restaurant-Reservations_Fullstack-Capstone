@@ -178,9 +178,15 @@ function statusNotFinished(req, res, next) {
 async function list(req, res) {
   const { date } = req.query;
   const reservations = await service.list(date);
-  res.locals.data = reservations;
-  const { data } = res.locals;
-  res.json({ data: data });
+
+  // Turn date string into an object for last us-06 backend test
+  // Todo- refactor schema to have reservation_date type as data, not string
+  const data = reservations.map((reservation) => {
+    const resDateObj = new Date(reservation.reservation_date);
+    return { ...reservation, reservation_date: resDateObj };
+  });
+
+  res.json({data});
 }
 
 // Read handler for reservation resources

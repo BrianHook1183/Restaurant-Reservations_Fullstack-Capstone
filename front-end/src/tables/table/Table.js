@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { finishTable, updateReservationStatus } from "../../utils/api";
+import { finishTable } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function Table({ table }) {
@@ -20,13 +20,6 @@ function Table({ table }) {
       setFinishTableError(null);
 
       finishTable(table_id, abortController.signal)
-        .then(
-          updateReservationStatus(
-            table.reservation_id,
-            "finished",
-            abortController.signal
-          )
-        )
         // history.go(0) refreshes the current page (should be /dashboard) so that tables effect hook reloads
         .then(() => history.go(0))
         .catch(setFinishTableError);
@@ -49,7 +42,10 @@ function Table({ table }) {
 
   return (
     <div className="card-body">
-      <h5 className="card-title">Table {table_name}</h5>
+      <h5 className="card-title">
+        Table {table_name} <span>(id_{table_id})</span>
+      </h5>
+
       <ul className="list-group list-group-flush">
         <li className="list-group-item">Capacity: {capacity}</li>
         <li className="list-group-item">
@@ -59,7 +55,7 @@ function Table({ table }) {
                 {occupied ? "occupied" : "free"}
               </span>
             </h6>
-            {occupied ? `(res_id #${occupied})`:null}
+            {occupied ? `(res_id #${occupied})` : null}
             <ErrorAlert error={finishTableError} />
           </div>
         </li>

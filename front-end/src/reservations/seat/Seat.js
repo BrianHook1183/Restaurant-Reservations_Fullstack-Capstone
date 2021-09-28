@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
-import {
-  listTables,
-  assignToTable,
-  getReservation,
-  updateReservationStatus,
-} from "../../utils/api";
+import { listTables, assignToTable, getReservation } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function Seat() {
@@ -52,14 +47,7 @@ function Seat() {
     setAssignTableError(null);
 
     assignToTable(reservation_id, formData.table_id, abortController.signal)
-      .then(
-        updateReservationStatus(
-          reservation_id,
-          "seated",
-          abortController.signal
-        )
-      )
-      .then(() => history.push(`/dashboard`))
+      .then(() => history.push("/dashboard"))
       .catch(setAssignTableError);
     return () => abortController.abort();
   };

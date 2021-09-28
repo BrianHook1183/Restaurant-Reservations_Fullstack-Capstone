@@ -21,13 +21,31 @@ function read(id) {
     .then((result) => result[0]);
 }
 
-// updates table after being assigned a reservation
-function update(updatedTable) {
-  return knex("tables")
-    .select("*")
-    .where({ table_id: updatedTable.table_id })
-    .update(updatedTable, "*")
-    .then((updatedTables) => updatedTables[0]);
+// updates table after being assigned a reservation - also updates reservation status
+async function update(updatedTable, resId, updatedResStatus) {
+  console.log("updatedTable", updatedTable);
+  console.log("resId", resId);
+  console.log("updatedResStatus", updatedResStatus);
+
+  // Using trx as a query builder:
+  knex.transaction((trx) => {
+    return trx("tables")
+      .select("*")
+      .where({ table_id: updatedTable.table_id })
+      .update(updatedTable, "*")
+      .then((updatedTables) => updatedTables[0])
+      .then((thisTable) => {
+        return trx("reservations")
+          .select("*")
+          .where({ reservation_id: resId })
+          .update({ reservation_status: updatedResStatus }, "*")
+          .then((updatedReservations) => updatedReservations[0]);
+      })
+      .catch(function (error) {
+        // If we get here, neither the reservation nor table updates have taken place.
+        console.error(error);
+      });
+  });
 }
 
 module.exports = {

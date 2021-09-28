@@ -15,6 +15,7 @@ async function hasReservationId(req, res, next) {
   });
 }
 
+//TODO this should probably import over from reservations.controller
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
   const reservation = await reservationsService.read(reservation_id);

@@ -24,6 +24,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status",
 ];
 
 function hasOnlyValidProperties(req, res, next) {
@@ -42,7 +43,16 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
-const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
+const REQUIRED_PROPERTIES = [
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people",
+];
+
+const hasRequiredProperties = hasProperties(...REQUIRED_PROPERTIES);
 
 const dateFormat = /^\d\d\d\d-\d\d-\d\d$/;
 const timeFormat = /^\d\d:\d\d$/;
@@ -72,8 +82,14 @@ function dateNotTuesday(dateString) {
   return date.getUTCDay() !== 2;
 }
 
+function statusIsBookedOrNull(reservation_status) {
+  const acceptedStatuses = ["booked", null];
+  // const rejectedStatuses = ["finished", "seated"];
+  return acceptedStatuses.includes(reservation_status);
+}
+
 function hasValidValues(req, res, next) {
-  const { reservation_date, reservation_time, people } = req.body.data;
+  const { reservation_date, reservation_time, people, status } = req.body.data;
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -113,6 +129,13 @@ function hasValidValues(req, res, next) {
         "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
     });
   }
+  if (!statusIsBookedOrNull(status)) {
+    return next({
+      status: 400,
+      message:
+        'If a reservation status is provided, it can only by "booked" - a null value is also accepted',
+    });
+  }
   next();
 }
 
@@ -124,6 +147,19 @@ function statusIsValid(req, res, next) {
     return next({
       status: 400,
       message: `${status} is an invalid status`,
+    });
+  }
+
+  next();
+}
+
+function statusNotFinished(req, res, next) {
+  const { status } = res.locals;
+
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: `a finished reservation cannot be updated`,
     });
   }
 
@@ -160,7 +196,7 @@ async function updateStatus(req, res) {
   const newStatus = req.body.data.status;
   const reservationId = res.locals.reservation.reservation_id;
   let data = await service.updateStatus(reservationId, newStatus);
-  res.status(200).json({ data });
+  res.status(200).json({ status: newStatus });
 }
 
 //! CRUD ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -175,6 +211,7 @@ module.exports = {
   updateStatus: [
     reservationExists,
     statusIsValid,
+    statusNotFinished,
     asyncErrorBoundary(updateStatus),
   ],
   list: asyncErrorBoundary(list),

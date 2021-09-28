@@ -64,6 +64,7 @@ function Dashboard({ date }) {
       <h2 className="mb-0">Reservations:</h2>
       <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />
+      <hr className="py-2 bg-dark" />
       <h2 className="mb-0">Tables:</h2>
       <TablesList tables={tables} />
       <ErrorAlert error={tablesError} />

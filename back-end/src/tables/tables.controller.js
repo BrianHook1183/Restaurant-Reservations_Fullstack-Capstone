@@ -15,6 +15,7 @@ async function hasReservationId(req, res, next) {
   });
 }
 
+//TODO this should probably import over from reservations.controller
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
   const reservation = await reservationsService.read(reservation_id);
@@ -25,6 +26,17 @@ async function reservationExists(req, res, next) {
   next({
     status: 404,
     message: `Reservation with id: ${reservation_id} was not found`,
+  });
+}
+
+async function reservationIsBooked(req, res, next) {
+  const { reservation } = res.locals;
+  if (reservation.status !== "seated") {
+    return next();
+  }
+  next({
+    status: 400,
+    message: `Reservation is already 'seated'`,
   });
 }
 
@@ -67,6 +79,8 @@ function occupyTable(req, res, next) {
   const { table } = res.locals;
   const { reservation_id } = req.body.data;
   table.reservation_id = reservation_id;
+  res.locals.resId = reservation_id;
+  res.locals.resStatus = "seated";
   if (table.reservation_id) {
     return next();
   }
@@ -89,7 +103,9 @@ function tableIsOccupied(req, res, next) {
 
 function deOccupyTable(req, res, next) {
   const { table } = res.locals;
+  res.locals.resId = table.reservation_id;
   table.reservation_id = null;
+  res.locals.resStatus = "finished";
   if (!table.reservation_id) {
     return next();
   }
@@ -170,10 +186,11 @@ async function read(req, res) {
 }
 
 // update handler for either assigning or removing a reservation from a table
+//* resId and resStatus are coming from last middleware (occupy and deoccupy table) before update for BOTH adding and deleting reservation_ids from tables. They are needed for the knex transaction in tables.service.js
 async function update(req, res) {
-  const { table } = res.locals;
+  const { table, resId, resStatus } = res.locals;
   const updatedTable = { ...table };
-  const data = await service.update(updatedTable);
+  const data = await service.update(updatedTable, resId, resStatus);
   res.json({ data });
 }
 
@@ -191,6 +208,7 @@ module.exports = {
   assignReservationId: [
     hasReservationId,
     reservationExists,
+    reservationIsBooked,
     tableExists,
     tableIsBigEnough,
     tableIsFree,

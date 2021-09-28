@@ -47,7 +47,7 @@ function Seat() {
     setAssignTableError(null);
 
     assignToTable(reservation_id, formData.table_id, abortController.signal)
-      .then(() => history.push(`/dashboard`))
+      .then(() => history.push("/dashboard"))
       .catch(setAssignTableError);
     return () => abortController.abort();
   };
@@ -58,6 +58,7 @@ function Seat() {
     history.goBack();
   };
   //TODO style dropdown https://getbootstrap.com/docs/4.0/components/dropdowns/
+  //TODO or better yet, make into clickable tiles/cards instead
   return (
     <section>
       <h1>Assign Party of {reservationDetails.people} to a Table</h1>

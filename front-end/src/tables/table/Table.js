@@ -42,20 +42,24 @@ function Table({ table }) {
 
   return (
     <div className="card-body">
-      <h5 className="card-title">Table {table_name}</h5>
+      <h5 className="card-title">
+        Table {table_name} <span>(id_{table_id})</span>
+      </h5>
+
       <ul className="list-group list-group-flush">
         <li className="list-group-item">Capacity: {capacity}</li>
         <li className="list-group-item">
-          <div className={`bg-${occupied ? "light" : "success"}`}>
-            <h6 className="text-center" data-table-id-status={`${table_id}`}>
-              {occupied ? "occupied" : "free"}
-              <ErrorAlert error={finishTableError} />
+          <div className={`text-center bg-${occupied ? "light" : "success"}`}>
+            <h6>
+              <span data-table-id-status={`${table_id}`}>
+                {occupied ? "occupied" : "free"}
+              </span>
             </h6>
+            {occupied ? `(res_id #${occupied})` : null}
+            <ErrorAlert error={finishTableError} />
           </div>
         </li>
-        <li className="list-group-item">
-          <h6 className="text-center">{finish}</h6>
-        </li>
+        <li className="list-group-item text-center">{finish}</li>
       </ul>
     </div>
   );

@@ -3,7 +3,7 @@ exports.up = function (knex) {
     table.string("first_name").notNullable();
     table.string("last_name").notNullable();
     table.string("mobile_number").notNullable();
-    table.string("reservation_date").notNullable();
+    table.date("reservation_date").notNullable();
     table.string("reservation_time").notNullable();
     table.integer("people").unsigned().notNullable();
   });

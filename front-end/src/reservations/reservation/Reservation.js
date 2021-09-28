@@ -1,24 +1,32 @@
 import React from "react";
 
-function Reservation({
-  reservation_id,
-  first_name,
-  last_name,
-  mobile_number,
-  reservation_time,
-  people,
-  status = null,
-}) {
-  //TODO incoming "status" prop needs logic still
-  let displayStatus = status || "booked";
-
-  const statusIndicators = {
+function Reservation({ reservation }) {
+  const {
+    reservation_id,
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_time,
+    people,
+    status,
+  } = reservation;
+  const statusStyles = {
     booked: "danger",
     seated: "success",
     finished: "muted",
   };
 
-  const statusIndicator = statusIndicators[displayStatus];
+  const statusStyle = statusStyles[status];
+
+  const seatBtnIfBooked =
+    status !== "booked" ? null : (
+      <a
+        href={`/reservations/${reservation_id}/seat`}
+        className="btn btn-primary"
+      >
+        Seat
+      </a>
+    );
 
   return (
     <>
@@ -30,15 +38,17 @@ function Reservation({
         <p className="card-text">
           Contact: {first_name} {last_name}, {mobile_number}
         </p>
-        <a
-          href={`/reservations/${reservation_id}/seat`}
-          className="btn btn-primary"
-        >
-          Seat
-        </a>
+        {seatBtnIfBooked}
       </div>
-      <div className={`card-footer text-${statusIndicator}`}>
-        Status: {displayStatus}
+      <div className="card-footer">
+        {`Status: `}
+        <span
+          className={`text-${statusStyle}`}
+          data-reservation-id-status={reservation_id}
+        >
+          {status}
+        </span>
+        <p>(res_id #{reservation_id})</p>
       </div>
     </>
   );

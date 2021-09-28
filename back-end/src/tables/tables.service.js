@@ -21,13 +21,30 @@ function read(id) {
     .then((result) => result[0]);
 }
 
-// updates table after being assigned a reservation
-function update(updatedTable) {
-  return knex("tables")
-    .select("*")
-    .where({ table_id: updatedTable.table_id })
-    .update(updatedTable, "*")
-    .then((updatedTables) => updatedTables[0]);
+// updates table after being assigned a reservation - also updates reservation status
+async function update(updatedTable, resId, updatedResStatus) {
+  try {
+    await knex.transaction(async (trx) => {
+      const returnedUpdatedTable = await trx("tables")
+        .where({ table_id: updatedTable.table_id })
+        .update(updatedTable, "*")
+        .then((updatedTables) => updatedTables[0]);
+
+      const returnedUpdatedReservation = await trx("reservations")
+        .where({ reservation_id: resId })
+        .update({ status: updatedResStatus }, "*")
+        .then((updatedReservations) => updatedReservations[0]);
+
+      console.log(
+        "reservations.controller.js update() knex.transaction: ",
+        returnedUpdatedTable,
+        returnedUpdatedReservation
+      );
+    });
+  } catch (error) {
+    // If we get here, neither the reservation nor table updates have taken place.
+    console.error(error);
+  }
 }
 
 module.exports = {

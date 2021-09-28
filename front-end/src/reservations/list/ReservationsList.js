@@ -2,22 +2,30 @@ import React from "react";
 import Reservation from "../reservation/Reservation";
 
 function ReservationsList({ reservations }) {
-  let reservationsList = null;
+  const currentReservations = [];
+  const finishedReservations = [];
 
-  if (reservations.length) {
-    reservationsList = reservations.map((reservation, index) => (
-      <div className="col mb-4" key={index}>
-        <div
-          className={`card h-100 text-center border-${
-            reservation.reservation_status === "booked" ? "primary" : "dark"
-          }`}
-          key={index}
-        >
-          <Reservation reservation={reservation} />
-        </div>
+  // Sorts reservations so only "booked" and "seated" are rendered
+  reservations.forEach((res) => {
+    if (res.reservation_status === "finished") {
+      finishedReservations.push(res);
+    } else {
+      currentReservations.push(res);
+    }
+  });
+
+  const reservationsList = currentReservations.map((res, index) => (
+    <div className="col mb-4" key={index}>
+      <div
+        className={`card h-100 text-center border-${
+          res.reservation_status === "booked" ? "primary" : "dark"
+        }`}
+        key={index}
+      >
+        <Reservation reservation={res} />
       </div>
-    ));
-  }
+    </div>
+  ));
 
   // if reservationsList is null/undefined, will not render, until there is a reservations array with at least 1 reservation
   return (

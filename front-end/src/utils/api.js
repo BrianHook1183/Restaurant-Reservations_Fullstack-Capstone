@@ -154,3 +154,15 @@ export async function updateReservationStatus(
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * returns reservations with partial match of phone number
+ */
+export async function listReservationsByMobile(mobile_number, signal) {
+  const url = new URL(
+    `${API_BASE_URL}/reservations?mobile_number=${mobile_number}}`
+  );
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}

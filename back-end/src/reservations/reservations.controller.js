@@ -169,21 +169,27 @@ function statusNotFinished(req, res, next) {
   next();
 }
 
+function hasValidQuery(req, res, next) {
+  const { date, mobile_number } = req.query;
+  if (!date && !mobile_number) {
+    return next({
+      status: 400,
+      message: `Either a ?date or ?mobile_number query is needed`,
+    });
+  }
+
+  next();
+}
+
 //! Validation ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //* CRUD vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 // List handler for reservation resources
 async function list(req, res) {
-  const { date } = req.query;
-  const reservations = await service.list(date);
-  /* 
-  // Turn date string into an object for last us-06 backend test
-  const data = reservations.map((reservation) => {
-    const resDateObj = new Date(reservation.reservation_date);
-    return { ...reservation, reservation_date: resDateObj };
-  });
-  res.json({data});
- */
+  const { mobile_number, date } = req.query;
+  const reservations = await (mobile_number
+    ? service.searchByPhone(mobile_number)
+    : service.searchByDate(date));
   res.json({ data: reservations });
 }
 
@@ -223,6 +229,6 @@ module.exports = {
     statusNotFinished,
     asyncErrorBoundary(updateStatus),
   ],
-  list: asyncErrorBoundary(list),
+  list: [hasValidQuery, asyncErrorBoundary(list)],
   read: [reservationExists, asyncErrorBoundary(read)],
 };

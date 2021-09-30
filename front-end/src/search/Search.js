@@ -14,23 +14,21 @@ function Search() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
+  const initialMessage = "awaiting orders from the human...";
+  const [resultsMessage, setResultsMessage] = useState(initialMessage);
+
   const handleChange = ({ target }) => {
     setMobileNumber(target.value);
   };
 
-  let loadingMessage = "";
-
   function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
-
-    loadingMessage = "loading...";
-
-    listReservationsByMobile({ mobileNumber }, abortController.signal)
+    setResultsMessage("...searching as fast as I can!");
+    listReservationsByMobile(mobileNumber, abortController.signal)
       .then(setReservations)
+      .then(setResultsMessage("No reservations found"))
       .catch(setReservationsError);
-
-    loadingMessage = "";
 
     return () => abortController.abort();
   }
@@ -38,26 +36,25 @@ function Search() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("Find clicked!");
     loadReservations();
   };
 
-  const searchResults = reservations.length ? (
-    <h2 className="mb-0">Search Results:</h2>
-  ) : (
-    loadingMessage
+  const searchResults = (
+    <h6 className="mt-5">
+      {reservations.length ? "Search Results:" : resultsMessage}
+    </h6>
   );
 
   return (
     <main>
-      <p className="text-center">...(search for a reservation)...</p>
+      <p className="text-center">Search</p>
       <form className="form-inline" onSubmit={handleSubmit}>
         <div className="form-group mx-sm-3 mb-2">
           <label className="sr-only">mobile_number</label>
           <input
             id="mobile_number"
             name="mobile_number"
-            type="text"
+            type="number"
             className="form-control"
             placeholder="Enter a customer's phone number"
             onChange={handleChange}

@@ -1,12 +1,24 @@
 const knex = require("../db/connection");
 
-// returns all reservations for the specified date
-function list(date) {
+//TODO now that list() was split into searchByDate and searchByPhone, should probably make a generic list() to return all
+
+// returns non-finished reservations for the specified date
+function searchByDate(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
     .whereNot("status", "finished")
     .orderBy("reservation_time");
+}
+
+// returns all reservations that partial match the specified phone number
+function searchByPhone(mobile_number) {
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
 }
 
 // returns a reservation for the specified id
@@ -31,7 +43,8 @@ function updateStatus(reservation_id, status) {
 }
 
 module.exports = {
-  list,
+  searchByDate,
+  searchByPhone,
   create,
   read,
   updateStatus,

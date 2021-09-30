@@ -54,7 +54,7 @@ function Search() {
           <input
             id="mobile_number"
             name="mobile_number"
-            type="number"
+            type="phone"
             className="form-control"
             placeholder="Enter a customer's phone number"
             onChange={handleChange}

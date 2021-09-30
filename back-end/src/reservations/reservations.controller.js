@@ -176,14 +176,6 @@ function statusNotFinished(req, res, next) {
 async function list(req, res) {
   const { date } = req.query;
   const reservations = await service.list(date);
-  /* 
-  // Turn date string into an object for last us-06 backend test
-  const data = reservations.map((reservation) => {
-    const resDateObj = new Date(reservation.reservation_date);
-    return { ...reservation, reservation_date: resDateObj };
-  });
-  res.json({data});
- */
   res.json({ data: reservations });
 }
 

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { updateReservationStatus } from "../../utils/api";
+import ErrorAlert from "../../layout/ErrorAlert";
 
 function Reservation({ reservation }) {
   const {
@@ -18,14 +21,68 @@ function Reservation({ reservation }) {
 
   const statusStyle = statusStyles[status];
 
-  const seatBtnIfBooked =
+  const history = useHistory();
+  const [cancelReservationError, setCancelReservationError] = useState(null);
+
+  const confirmCancel = () => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      setCancelReservationError(null);
+
+      updateReservationStatus(
+        reservation_id,
+        "cancelled",
+        abortController.signal
+      )
+        // history.go(0) refreshes the current page (should be /dashboard) so that tables effect hook reloads
+        .then(() => history.go(0))
+        .catch(setCancelReservationError);
+      return () => abortController.abort();
+    }
+  };
+
+  const buttonsIfBooked =
     status !== "booked" ? null : (
-      <a
-        href={`/reservations/${reservation_id}/seat`}
-        className="btn btn-primary"
+      <div
+        className="btn-toolbar justify-content-between"
+        role="toolbar"
+        aria-label="reservation actions"
       >
-        Seat
-      </a>
+        <div
+          className="btn-group"
+          role="group"
+          aria-label="Seat Reservation Button"
+        >
+          <a
+            href={`/reservations/${reservation_id}/seat`}
+            className="btn btn-primary"
+          >
+            Seat
+          </a>
+        </div>
+        <div
+          className="btn-group-sm"
+          role="group"
+          aria-label="Modify Reservation actions"
+        >
+          <a
+            href={`/reservations/${reservation_id}/edit`}
+            className="btn btn-secondary mr-2"
+          >
+            Edit
+          </a>
+          <button
+            className={`btn btn-danger data-reservation-id-cancel=${reservation_id}`}
+            onClick={confirmCancel}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     );
 
   return (
@@ -38,7 +95,8 @@ function Reservation({ reservation }) {
         <p className="card-text">
           Contact: {first_name} {last_name}, {mobile_number}
         </p>
-        {seatBtnIfBooked}
+        {buttonsIfBooked}
+        <ErrorAlert error={cancelReservationError} />
       </div>
       <div className="card-footer">
         {`Status: `}

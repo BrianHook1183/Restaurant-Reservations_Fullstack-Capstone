@@ -8,9 +8,17 @@ import ErrorAlert from "../../layout/ErrorAlert";
  * A controlled form used for creating and modifying reservations
  */
 
-function Form() {
+function Form({ mode }) {
   const [reservationsError, setReservationsError] = useState(null);
   const history = useHistory();
+
+  //TODO us-08 - Load reservation for Edit mode
+  console.log("Form mode is: ", mode);
+  /* 
+  if(mode === "edit") {
+    // GET reservation
+  }
+ */
 
   const initialFormState = {
     first_name: "",

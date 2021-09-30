@@ -11,7 +11,7 @@ function New() {
       <div className="d-md-flex mb-3">
         <h1 className="mb-0">Make a Reservation</h1>
       </div>
-      <Form />
+      <Form mode={"new"} />
     </section>
   );
 }

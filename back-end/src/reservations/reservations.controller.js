@@ -133,7 +133,7 @@ function hasValidValues(req, res, next) {
         "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
     });
   }
-  if (!statusIsBookedOrNull(res.locals.reservation?.status)) {
+  if (!statusIsBookedOrNull(req.body.data?.status)) {
     return next({
       status: 400,
       message: '"seated" and "finished" are not valid statuses upon creation',

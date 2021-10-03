@@ -45,6 +45,7 @@ function Reservation({ reservation }) {
     }
   };
 
+  //TODO move buttons into their own component
   const buttonsIfBooked =
     status !== "booked" ? null : (
       <div
@@ -93,7 +94,7 @@ function Reservation({ reservation }) {
           "{last_name}, party of {people}!"
         </h5>
         <p className="card-text">
-          Contact: {first_name} {last_name}, {mobile_number}
+          Contact: ({first_name}) {mobile_number}
         </p>
         {buttonsIfBooked}
         <ErrorAlert error={cancelReservationError} />
@@ -106,7 +107,6 @@ function Reservation({ reservation }) {
         >
           {status}
         </span>
-        <p>(res_id #{reservation_id})</p>
       </div>
     </>
   );

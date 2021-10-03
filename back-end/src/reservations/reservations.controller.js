@@ -144,7 +144,7 @@ function hasValidValues(req, res, next) {
 
 function statusIsValid(req, res, next) {
   const { status } = req.body.data;
-  const VALID_STATUSES = ["seated", "finished", "booked"];
+  const VALID_STATUSES = ["seated", "finished", "booked", "cancelled"];
 
   if (!VALID_STATUSES.includes(status)) {
     return next({

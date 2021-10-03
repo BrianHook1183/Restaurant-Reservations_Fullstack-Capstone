@@ -77,8 +77,9 @@ function Reservation({ reservation }) {
             Edit
           </a>
           <button
-            className={`btn btn-danger data-reservation-id-cancel=${reservation_id}`}
+            className="btn btn-danger"
             onClick={confirmCancel}
+            data-reservation-id-cancel={reservation_id}
           >
             Cancel
           </button>

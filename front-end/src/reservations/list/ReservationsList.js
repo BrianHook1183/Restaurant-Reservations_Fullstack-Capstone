@@ -8,7 +8,8 @@ function ReservationsList({ reservations }) {
   //  ensures finished reservations do not render
   //! finishedReservations were being kept just in case they were needed in future ---- but, as of us-06, reservations does not contain any finished reservations anyways
   reservations.forEach((res) => {
-    if (res.status === "finished") {
+    // if (res.status === "finished") {
+    if (["finished", "cancelled"].includes(res.status)) {
       finishedReservations.push(res);
     } else {
       currentReservations.push(res);

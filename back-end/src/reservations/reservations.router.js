@@ -12,7 +12,8 @@ router.route("/")
   .post(controller.create);
 
 router.route("/:reservationId")
-  .get(controller.read);
+  .get(controller.read)
+  .put(controller.update);
 
 router.route("/:reservationId/status")
   .put(controller.updateStatus);

@@ -23,6 +23,13 @@ function searchByPhone(mobile_number) {
 
 // returns a reservation for the specified id
 function read(id) {
+  console.log(
+    "🚀 ~ file: reservations.service.js ~ line 26 ~ read ~ id",
+    id,
+    "typeof: ",
+    typeof id
+  );
+
   return knex("reservations")
     .select("*")
     .where({ reservation_id: id })
@@ -34,12 +41,20 @@ function create(reservation) {
   return knex("reservations")
     .insert(reservation)
     .returning("*")
-    .then((newReservations) => newReservations[0]);
+    .then((result) => result[0]);
 }
 
 // updates reservation status
 function updateStatus(reservation_id, status) {
   return knex("reservations").where({ reservation_id }).update({ status }, "*");
+}
+
+// updates reservation
+function update(reservation_id, updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id })
+    .update(updatedReservation, "*")
+    .then((result) => result[0]);
 }
 
 module.exports = {
@@ -48,4 +63,5 @@ module.exports = {
   create,
   read,
   updateStatus,
+  update,
 };

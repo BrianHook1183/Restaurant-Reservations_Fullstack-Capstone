@@ -11,7 +11,7 @@ function Edit() {
       <div className="d-md-flex mb-3">
         <h1 className="mb-0">Edit Reservation</h1>
       </div>
-      <Form mode={"edit"} />
+      <Form method={"PUT"} />
     </section>
   );
 }

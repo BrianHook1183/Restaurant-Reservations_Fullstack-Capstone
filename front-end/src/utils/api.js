@@ -94,13 +94,7 @@ export async function getReservation(id, signal) {
  * creates a new reservation
  */
 export async function postReservation(reservation, signal) {
-  console.log(
-    "🚀 ~ file: api.js ~ line 100 ~ reservation formDetails received from Form.js submitNew",
-    reservation
-  );
-
   const url = new URL(`${API_BASE_URL}/reservations`);
-
   const options = {
     method: "POST",
     headers,
@@ -116,7 +110,7 @@ export async function updateReservation(
   newReservation,
   signal
 ) {
-  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
   const options = {
     method: "PUT",
     headers,

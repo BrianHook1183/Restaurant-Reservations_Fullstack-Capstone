@@ -15,15 +15,6 @@ import ErrorAlert from "../../layout/ErrorAlert";
 
 function Form({ method }) {
   const { reservation_id } = useParams();
-
-  if (method === "PUT") {
-    console.log(
-      "🚀 ~ file: Form.js ~ line 19 ~ Form ~ reservation_id",
-      reservation_id,
-      typeof reservation_id
-    );
-  }
-
   const [reservationsError, setReservationError] = useState(null);
   const history = useHistory();
 
@@ -73,14 +64,9 @@ function Form({ method }) {
   };
 
   const submitNew = () => {
-    console.log("🚀 ~ file: Form.js ~ line 71 ~ submitNew() ran");
     const abortController = new AbortController();
     setReservationError(null);
 
-    console.log(
-      "🚀 ~ file: Form.js ~ line 75 ~ submitNew ~ formData sent to postReservation API",
-      formData
-    );
     postReservation(formData, abortController.signal)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
       .catch(setReservationError);
@@ -89,12 +75,6 @@ function Form({ method }) {
   };
 
   const submitEdit = () => {
-    console.log("SUBMITEDIT RAN FROM FORM.js");
-    console.log(
-      "🚀 ~ file: Form.js ~ line 94 ~ submitEdit ~ reservation_id",
-      reservation_id,
-      typeof reservation_id
-    );
     const abortController = new AbortController();
     setReservationError(null);
 
@@ -107,10 +87,6 @@ function Form({ method }) {
       reservation_date: formData.reservation_date,
       reservation_time: formData.reservation_time,
     };
-    console.log(
-      "🚀 ~ file: Form.js ~ line 89 ~ submitEdit ~ trimmedFormData",
-      trimmedFormData
-    );
 
     updateReservation(reservation_id, trimmedFormData, abortController.signal)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))

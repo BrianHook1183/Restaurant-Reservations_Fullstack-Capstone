@@ -23,16 +23,9 @@ function searchByPhone(mobile_number) {
 
 // returns a reservation for the specified id
 function read(id) {
-  console.log(
-    "🚀 ~ file: reservations.service.js ~ line 26 ~ read ~ id",
-    id,
-    "typeof: ",
-    typeof id
-  );
-
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: id })
+    .where({ reservation_id: Number(id) })
     .then((result) => result[0]);
 }
 

@@ -34,12 +34,6 @@ async function update(updatedTable, resId, updatedResStatus) {
         .where({ reservation_id: resId })
         .update({ status: updatedResStatus }, "*")
         .then((updatedReservations) => updatedReservations[0]);
-
-      console.log(
-        "reservations.controller.js update() knex.transaction: ",
-        returnedUpdatedTable,
-        returnedUpdatedReservation
-      );
     });
   } catch (error) {
     // If we get here, neither the reservation nor table updates have taken place.

@@ -7,13 +7,9 @@ const hasProperties = require("../errors/hasProperties");
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId);
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 10 ~ reservationExists ~ reservation",
-    reservation
-  );
+
   if (reservation) {
     res.locals.reservation = reservation;
-    //   console.log("🚀 ~ file: reservations.controller.js ~ line 13 ~ reservationExists ~ res.locals.reservation", res.locals.reservation)
     return next();
   }
   next({
@@ -30,19 +26,16 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
   "status",
+  "reservation_id",
+  "created_at",
+  "updated_at",
 ];
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 33 ~ hasOnlyValidProperties ~ data",
-    data
-  );
-
   const invalidStatuses = Object.keys(data).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
-
   if (invalidStatuses.length) {
     return next({
       status: 400,
@@ -101,12 +94,6 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 104 ~ hasValidValues ~ reservation_date, reservation_time, people",
-    reservation_date,
-    reservation_time,
-    people
-  );
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -222,19 +209,11 @@ async function list(req, res) {
 async function read(req, res) {
   //* res.locals.reservation is being set from reservationExists()
   const { reservation } = res.locals;
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 216 ~ read ~ reservation",
-    reservation
-  );
   res.json({ data: reservation });
 }
 
 // Create handler for a new reservation
 async function create(req, res) {
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 230 ~ create ~ req.body.data which shouldbe same as formData / ",
-    req.body.data
-  );
   const reservation = await service.create(req.body.data);
   res.status(201).json({ data: reservation });
 }
@@ -250,27 +229,15 @@ async function updateStatus(req, res) {
 // Update handler for reservation status
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 232 ~ update ~ reservation_id",
-    reservation_id
-  );
   const newReservationDetails = req.body.data;
   const existingReservation = res.locals.reservation;
   const mergedReservation = {
     ...existingReservation,
     ...newReservationDetails,
   };
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 236 ~ update ~ mergedReservation",
-    mergedReservation
-  );
   let updatedReservation = await service.update(
     reservation_id,
     mergedReservation
-  );
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 249 ~ update ~ updatedReservation",
-    updatedReservation
   );
   res.status(200).json({ data: updatedReservation });
 }

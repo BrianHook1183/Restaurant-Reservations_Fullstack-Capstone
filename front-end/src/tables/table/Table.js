@@ -42,10 +42,7 @@ function Table({ table }) {
 
   return (
     <div className="card-body">
-      <h5 className="card-title">
-        Table {table_name} <span>(id_{table_id})</span>
-      </h5>
-
+      <h5 className="card-title">Table {table_name}</h5>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">Capacity: {capacity}</li>
         <li className="list-group-item">
@@ -55,7 +52,6 @@ function Table({ table }) {
                 {occupied ? "occupied" : "free"}
               </span>
             </h6>
-            {occupied ? `(res_id #${occupied})` : null}
             <ErrorAlert error={finishTableError} />
           </div>
         </li>

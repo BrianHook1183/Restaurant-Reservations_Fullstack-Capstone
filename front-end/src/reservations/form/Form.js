@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useParams } from "react-router";
 import { today, formatAsTime } from "../../utils/date-time";
-import { postReservation } from "../../utils/api";
+import {
+  postReservation,
+  updateReservation,
+  getReservation,
+} from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 /**
  * A controlled form used for creating and modifying reservations
  */
 
-function Form() {
-  const [reservationsError, setReservationsError] = useState(null);
+function Form({ method }) {
+  const { reservation_id } = useParams();
+  const [reservationsError, setReservationError] = useState(null);
   const history = useHistory();
 
   const initialFormState = {
@@ -22,6 +28,21 @@ function Form() {
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
+
+  // load reservation details from url param and fill form
+  useEffect(() => {
+    //Avoids this warning from trying to conditionally run useEffect: " React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks"
+    if (method === "POST") return;
+
+    const abortController = new AbortController();
+    setReservationError(null);
+
+    getReservation(reservation_id, abortController.signal)
+      .then(setFormData)
+      .catch(setReservationError);
+
+    return () => abortController.abort();
+  }, [reservation_id, method]);
 
   const handleChange = ({ target }) => {
     let value = target.value;
@@ -39,12 +60,38 @@ function Form() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    method === "POST" ? submitNew() : submitEdit();
+  };
+
+  const submitNew = () => {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setReservationError(null);
 
     postReservation(formData, abortController.signal)
       .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
-      .catch(setReservationsError);
+      .catch(setReservationError);
+
+    return () => abortController.abort();
+  };
+
+  const submitEdit = () => {
+    const abortController = new AbortController();
+    setReservationError(null);
+
+    // removes properties from GET for error free PUT
+    const trimmedFormData = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      people: formData.people,
+      mobile_number: formData.mobile_number,
+      reservation_date: formData.reservation_date,
+      reservation_time: formData.reservation_time,
+    };
+
+    updateReservation(reservation_id, trimmedFormData, abortController.signal)
+      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+      .catch(setReservationError);
+
     return () => abortController.abort();
   };
 

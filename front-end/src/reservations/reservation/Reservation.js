@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { updateReservationStatus } from "../../utils/api";
+import ReservationButtons from "../buttons/ReservationButtons";
+import ErrorAlert from "../../layout/ErrorAlert";
 
 function Reservation({ reservation }) {
   const {
@@ -18,15 +22,34 @@ function Reservation({ reservation }) {
 
   const statusStyle = statusStyles[status];
 
-  const seatBtnIfBooked =
-    status !== "booked" ? null : (
-      <a
-        href={`/reservations/${reservation_id}/seat`}
-        className="btn btn-primary"
-      >
-        Seat
-      </a>
-    );
+  const history = useHistory();
+  const [cancelReservationError, setCancelReservationError] = useState(null);
+
+  const confirmCancel = () => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+      setCancelReservationError(null);
+
+      updateReservationStatus(
+        reservation_id,
+        "cancelled",
+        abortController.signal
+      )
+        // history.go(0) refreshes the current page (should be /dashboard) so that tables effect hook reloads
+        .then(() => history.go(0))
+        .catch(setCancelReservationError);
+      return () => abortController.abort();
+    }
+  };
+
+  const buttons =
+    status === "booked" ? (
+      <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
+    ) : null;
 
   return (
     <>
@@ -36,9 +59,10 @@ function Reservation({ reservation }) {
           "{last_name}, party of {people}!"
         </h5>
         <p className="card-text">
-          Contact: {first_name} {last_name}, {mobile_number}
+          Contact: ({first_name}) {mobile_number}
         </p>
-        {seatBtnIfBooked}
+        {buttons}
+        <ErrorAlert error={cancelReservationError} />
       </div>
       <div className="card-footer">
         {`Status: `}
@@ -48,7 +72,6 @@ function Reservation({ reservation }) {
         >
           {status}
         </span>
-        <p>(res_id #{reservation_id})</p>
       </div>
     </>
   );

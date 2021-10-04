@@ -25,7 +25,7 @@ function searchByPhone(mobile_number) {
 function read(id) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: id })
+    .where({ reservation_id: Number(id) })
     .then((result) => result[0]);
 }
 
@@ -34,12 +34,20 @@ function create(reservation) {
   return knex("reservations")
     .insert(reservation)
     .returning("*")
-    .then((newReservations) => newReservations[0]);
+    .then((result) => result[0]);
 }
 
 // updates reservation status
 function updateStatus(reservation_id, status) {
   return knex("reservations").where({ reservation_id }).update({ status }, "*");
+}
+
+// updates reservation
+function update(reservation_id, updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id })
+    .update(updatedReservation, "*")
+    .then((result) => result[0]);
 }
 
 module.exports = {
@@ -48,4 +56,5 @@ module.exports = {
   create,
   read,
   updateStatus,
+  update,
 };

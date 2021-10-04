@@ -52,6 +52,10 @@ async function fetchJson(url, options, onCancel) {
   }
 }
 
+/*
+ * vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  Reservations  vvvvvvvvvvvvvvvvvvvvvvv
+ */
+
 /**
  * Retrieves all existing reservation.
  * @returns {Promise<[reservation]>}
@@ -67,6 +71,18 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ * returns reservations with partial match of phone number
+ */
+export async function listReservationsByMobile(mobile_number, signal) {
+  const url = new URL(
+    `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`
+  );
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
 export async function getReservation(id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${id}`);
   return await fetchJson(url, { headers, signal }, [])
@@ -75,18 +91,59 @@ export async function getReservation(id, signal) {
 }
 
 /**
- * Posts a new reservation
+ * creates a new reservation
  */
-export async function postReservation(reservationDetails, signal) {
+export async function postReservation(reservation, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({ data: reservationDetails }),
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+
+  return await fetchJson(url, options);
+}
+
+export async function updateReservation(
+  reservation_id,
+  newReservation,
+  signal
+) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: newReservation }),
     signal,
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * Updates a reservation's status
+ */
+export async function updateReservationStatus(
+  reservation_id,
+  newStatus,
+  signal
+) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: newStatus } }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+/* 
+! ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  Reservations  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+*/
+/*
+ * vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv  Tables  vvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+ */
 
 /**
  * Retrieves all tables
@@ -137,32 +194,6 @@ export async function finishTable(table_id, signal) {
   return await fetchJson(url, options);
 }
 
-/**
- * Updates a reservation's status
- */
-export async function updateReservationStatus(
-  reservation_id,
-  newStatus,
-  signal
-) {
-  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
-  const options = {
-    method: "PUT",
-    headers,
-    body: JSON.stringify({ data: { status: newStatus } }),
-    signal,
-  };
-  return await fetchJson(url, options);
-}
-
-/**
- * returns reservations with partial match of phone number
- */
-export async function listReservationsByMobile(mobile_number, signal) {
-  const url = new URL(
-    `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`
-  );
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
-}
+/* 
+! ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  Tables  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+*/

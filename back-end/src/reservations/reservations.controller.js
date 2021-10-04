@@ -7,6 +7,7 @@ const hasProperties = require("../errors/hasProperties");
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId);
+
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
@@ -25,15 +26,16 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
   "status",
+  "reservation_id",
+  "created_at",
+  "updated_at",
 ];
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
-
   const invalidStatuses = Object.keys(data).filter(
     (field) => !VALID_PROPERTIES.includes(field)
   );
-
   if (invalidStatuses.length) {
     return next({
       status: 400,
@@ -83,8 +85,6 @@ function dateNotTuesday(dateString) {
 }
 
 function statusIsBookedOrNull(status) {
-  // const acceptedStatuses = ["booked"];
-  // const rejectedStatuses = ["finished", "seated"];
   if (!status || status === "booked") {
     return true;
   } else {
@@ -93,7 +93,7 @@ function statusIsBookedOrNull(status) {
 }
 
 function hasValidValues(req, res, next) {
-  const { reservation_date, reservation_time, people, status } = req.body.data;
+  const { reservation_date, reservation_time, people } = req.body.data;
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -133,7 +133,7 @@ function hasValidValues(req, res, next) {
         "The reservation date is a Tuesday- but the restaurant is closed on Tuesdays",
     });
   }
-  if (!statusIsBookedOrNull(status)) {
+  if (!statusIsBookedOrNull(req.body.data?.status)) {
     return next({
       status: 400,
       message: '"seated" and "finished" are not valid statuses upon creation',
@@ -144,7 +144,7 @@ function hasValidValues(req, res, next) {
 
 function statusIsValid(req, res, next) {
   const { status } = req.body.data;
-  const VALID_STATUSES = ["seated", "finished", "booked"];
+  const VALID_STATUSES = ["seated", "finished", "booked", "cancelled"];
 
   if (!VALID_STATUSES.includes(status)) {
     return next({
@@ -163,6 +163,18 @@ function statusNotFinished(req, res, next) {
     return next({
       status: 400,
       message: `a finished reservation cannot be updated`,
+    });
+  }
+
+  next();
+}
+
+function statusIsBooked(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status !== "booked") {
+    return next({
+      status: 400,
+      message: 'Only "booked" reservations may be edited',
     });
   }
 
@@ -202,16 +214,32 @@ async function read(req, res) {
 
 // Create handler for a new reservation
 async function create(req, res) {
-  const data = await service.create(req.body.data);
-  res.status(201).json({ data });
+  const reservation = await service.create(req.body.data);
+  res.status(201).json({ data: reservation });
 }
 
 // Update handler for reservation status
 async function updateStatus(req, res) {
   const newStatus = req.body.data.status;
-  const reservationId = res.locals.reservation.reservation_id;
-  let data = await service.updateStatus(reservationId, newStatus);
+  const { reservation_id } = res.locals.reservation;
+  let data = await service.updateStatus(reservation_id, newStatus);
   res.status(200).json({ data: { status: newStatus } });
+}
+
+// Update handler for reservation status
+async function update(req, res) {
+  const { reservation_id } = res.locals.reservation;
+  const newReservationDetails = req.body.data;
+  const existingReservation = res.locals.reservation;
+  const mergedReservation = {
+    ...existingReservation,
+    ...newReservationDetails,
+  };
+  let updatedReservation = await service.update(
+    reservation_id,
+    mergedReservation
+  );
+  res.status(200).json({ data: updatedReservation });
 }
 
 //! CRUD ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -222,6 +250,14 @@ module.exports = {
     hasRequiredProperties,
     hasValidValues,
     asyncErrorBoundary(create),
+  ],
+  update: [
+    reservationExists,
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    hasValidValues,
+    statusIsBooked,
+    asyncErrorBoundary(update),
   ],
   updateStatus: [
     reservationExists,

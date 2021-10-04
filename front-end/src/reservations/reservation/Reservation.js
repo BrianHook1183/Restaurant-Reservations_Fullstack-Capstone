@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { updateReservationStatus } from "../../utils/api";
+import ReservationButtons from "../buttons/ReservationButtons";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 function Reservation({ reservation }) {
@@ -45,47 +46,10 @@ function Reservation({ reservation }) {
     }
   };
 
-  //TODO move buttons into their own component
-  const buttonsIfBooked =
-    status !== "booked" ? null : (
-      <div
-        className="btn-toolbar justify-content-between"
-        role="toolbar"
-        aria-label="reservation actions"
-      >
-        <div
-          className="btn-group"
-          role="group"
-          aria-label="Seat Reservation Button"
-        >
-          <a
-            href={`/reservations/${reservation_id}/seat`}
-            className="btn btn-primary"
-          >
-            Seat
-          </a>
-        </div>
-        <div
-          className="btn-group-sm"
-          role="group"
-          aria-label="Modify Reservation actions"
-        >
-          <a
-            href={`/reservations/${reservation_id}/edit`}
-            className="btn btn-secondary mr-2"
-          >
-            Edit
-          </a>
-          <button
-            className="btn btn-danger"
-            onClick={confirmCancel}
-            data-reservation-id-cancel={reservation_id}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    );
+  const buttons =
+    status === "booked" ? (
+      <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
+    ) : null;
 
   return (
     <>
@@ -97,7 +61,7 @@ function Reservation({ reservation }) {
         <p className="card-text">
           Contact: ({first_name}) {mobile_number}
         </p>
-        {buttonsIfBooked}
+        {buttons}
         <ErrorAlert error={cancelReservationError} />
       </div>
       <div className="card-footer">

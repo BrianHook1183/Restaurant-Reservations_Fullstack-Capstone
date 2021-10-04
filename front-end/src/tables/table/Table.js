@@ -52,7 +52,6 @@ function Table({ table }) {
                 {occupied ? "occupied" : "free"}
               </span>
             </h6>
-            {occupied ? `(res_id #${occupied})` : null}
             <ErrorAlert error={finishTableError} />
           </div>
         </li>

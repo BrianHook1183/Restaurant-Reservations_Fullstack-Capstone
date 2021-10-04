@@ -19,6 +19,7 @@ function TablesList({ tables }) {
   }
 
   // if tablesList is null/undefined, will not render, until there is a tables array with at least 1 table
+  // todo There needs to be a difference between loading message and an actual empty tablesList
   return (
     <div className="row row-cols-1 row-cols-md-3">
       {tablesList ?? "(...loading tables)"}

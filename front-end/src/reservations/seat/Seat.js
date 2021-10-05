@@ -52,11 +52,12 @@ function Seat() {
     return () => abortController.abort();
   };
 
+  // cancelling a table assignment while in progress sends user back to previous page.
   const handleCancel = (event) => {
     event.preventDefault();
-    // cancelling a table assignment while in progress sends user back to previous page.
     history.goBack();
   };
+
   //TODO style dropdown https://getbootstrap.com/docs/4.0/components/dropdowns/
   //TODO or better yet, make into clickable tiles/cards instead
   return (

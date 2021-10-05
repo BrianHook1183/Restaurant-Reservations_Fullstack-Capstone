@@ -206,8 +206,8 @@ async function list(req, res) {
 }
 
 // Read handler for reservation resources
+//* res.locals.reservation is being set from reservationExists()
 async function read(req, res) {
-  //* res.locals.reservation is being set from reservationExists()
   const { reservation } = res.locals;
   res.json({ data: reservation });
 }

@@ -116,8 +116,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message:
-        "The reservation_time and/or reservation_date is in the past. Only future reservations are allowed",
+      message: `The reservation_time and/or reservation_date (reservation_date = ${reservation_date}) is in the past. Only future reservations are allowed (Date.now() = ${Date.now()})`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

@@ -67,9 +67,9 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(reservation_date, reservation_time) {
+function dateNotInPast(reservation_date) {
   const today = new Date();
-  const date = new Date(`${reservation_date} ${reservation_time}`);
+  const date = new Date(reservation_date);
   return date.valueOf() > today;
 }
 
@@ -113,7 +113,7 @@ function hasValidValues(req, res, next) {
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
     });
   }
-  if (!dateNotInPast(reservation_date, reservation_time)) {
+  if (!dateNotInPast(reservation_date)) {
     return next({
       status: 400,
       message: `The reservation_date is in the past. Only future reservations are allowed (Date.now() = ${Date.now()}) (Date.now(reservation_date) = ${Date.now(

@@ -59,8 +59,12 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h4>{displayDateLong}</h4>
-      <DateNavigation date={date} />
+      <div className="row">
+        <div className="col-md-6 col-9 mx-auto">
+          <h4 className="mb-0 text-center">{displayDateLong}</h4>
+          <DateNavigation date={date} />
+        </div>
+      </div>
       <h2 className="mb-0">Reservations:</h2>
       <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />

@@ -8,17 +8,31 @@ import { today, previous, next } from "../utils/date-time";
 
 function DateNavigation({ date }) {
   return (
-    <>
-      <Link to={`/dashboard?date=${previous(date)}`}>
-        <button type="button">Previous</button>
+    <nav className="nav justify-content-center" aria-label="Change date">
+      <Link
+        className="nav-link"
+        to={`/dashboard?date=${previous(date)}`}
+        aria-label="Previous"
+      >
+        <span aria-hidden="true">&laquo; </span>
+        <span> Previous</span>
       </Link>
-      <Link to={`/dashboard?date=${today()}`}>
-        <button type="button">Today</button>
+      <Link
+        className="nav-link"
+        to={`/dashboard?date=${today()}`}
+        aria-label="Today"
+      >
+        <span>Today</span>
       </Link>
-      <Link to={`/dashboard?date=${next(date)}`}>
-        <button type="button">Next</button>
+      <Link
+        className="nav-link"
+        to={`/dashboard?date=${next(date)}`}
+        aria-label="Next"
+      >
+        <span>Next </span>
+        <span aria-hidden="true"> &raquo;</span>
       </Link>
-    </>
+    </nav>
   );
 }
 

@@ -68,7 +68,7 @@ function dateFormatIsValid(dateString) {
 }
 
 function dateNotInPast(reservation_date, reservation_time) {
-  const today = Date.now();
+  const today = new Date();
   const date = new Date(`${reservation_date} ${reservation_time}`);
   return date.valueOf() > today;
 }
@@ -116,7 +116,9 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `The reservation_time and/or reservation_date (reservation_date = ${reservation_date}, reservation_time = ${reservation_time}) is in the past. Only future reservations are allowed (Date.now() = ${Date.now().toString()})`,
+      message: `The reservation_date is in the past. Only future reservations are allowed (Date.now() = ${Date.now()}) (Date.now(reservation_date) = ${Date.now(
+        reservation_date
+      )})`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

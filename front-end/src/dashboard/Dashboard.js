@@ -60,7 +60,6 @@ function Dashboard({ date }) {
   return (
     <main>
       <h4>{displayDateLong}</h4>
-      <p>Debugging Heroku deployment: Branch= "refactor-for-submission"</p>
       <DateNavigation date={date} />
       <h2 className="mb-0">Reservations:</h2>
       <ReservationsList reservations={reservations} />

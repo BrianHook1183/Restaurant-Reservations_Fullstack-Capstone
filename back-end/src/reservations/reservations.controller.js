@@ -68,18 +68,10 @@ function dateFormatIsValid(dateString) {
 }
 
 function dateNotInPast(dateString, timeString) {
-  const today = new Date();
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 73 ~ dateNotInPast ~ today",
-    today
-  );
-  // '2021-10-08T01:21:00'
+  const now = new Date();
+  // creating a date object using a string like:  '2021-10-08T01:21:00'
   const reservationDate = new Date(dateString + "T" + timeString);
-  console.log(
-    "🚀 ~ file: reservations.controller.js ~ line 75 ~ dateNotInPast ~ reservationDate",
-    reservationDate
-  );
-  return reservationDate >= today;
+  return reservationDate >= now;
 }
 
 function timeDuringBizHours(timeString) {
@@ -125,9 +117,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `The proposed date/time (${reservation_date}T${reservation_time}) is in the past. Only future reservations are allowed 
-      (now = ${new Date()}) 
-      (proposed = ${new Date(reservation_date + "T" + reservation_time)})`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

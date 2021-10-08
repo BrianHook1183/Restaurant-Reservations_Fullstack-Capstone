@@ -67,9 +67,18 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(dateString) {
+function dateNotInPast(dateString, timeString) {
   const today = new Date();
-  const reservationDate = new Date(dateString);
+  console.log(
+    "🚀 ~ file: reservations.controller.js ~ line 73 ~ dateNotInPast ~ today",
+    today
+  );
+  // '2021-10-08T01:21:00'
+  const reservationDate = new Date(dateString + "T" + timeString);
+  console.log(
+    "🚀 ~ file: reservations.controller.js ~ line 75 ~ dateNotInPast ~ reservationDate",
+    reservationDate
+  );
   return reservationDate >= today;
 }
 
@@ -113,12 +122,12 @@ function hasValidValues(req, res, next) {
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
     });
   }
-  if (!dateNotInPast(reservation_date)) {
+  if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `The reservation_date is in the past. Only future reservations are allowed (Date.now() = ${Date.now()}) (new Date(reservation_date) = ${new Date(
-        reservation_date
-      )})`,
+      message: `The proposed date/time (${reservation_date}T${reservation_time}) is in the past. Only future reservations are allowed 
+      (now = ${new Date()}) 
+      (proposed = ${new Date(reservation_date + "T" + reservation_time)})`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

@@ -67,16 +67,16 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(reservation_date) {
+function dateNotInPast(dateString) {
   const today = new Date();
-  const date = new Date(reservation_date);
-  return date.valueOf() > today;
+  const reservationDate = new Date(dateString);
+  return reservationDate >= today;
 }
 
-function timeDuringBizHours(reservation_time) {
+function timeDuringBizHours(timeString) {
   const open = "10:30";
   const close = "21:30";
-  return reservation_time <= close && reservation_time >= open;
+  return timeString <= close && timeString >= open;
 }
 
 function dateNotTuesday(dateString) {
@@ -116,7 +116,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date)) {
     return next({
       status: 400,
-      message: `The reservation_date is in the past. Only future reservations are allowed (Date.now() = ${Date.now()}) (Date.now(reservation_date) = ${Date.now(
+      message: `The reservation_date is in the past. Only future reservations are allowed (Date.now() = ${Date.now()}) (new Date(reservation_date) = ${new Date(
         reservation_date
       )})`,
     });

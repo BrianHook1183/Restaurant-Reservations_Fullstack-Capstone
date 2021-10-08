@@ -47,8 +47,8 @@ function Search() {
 
   return (
     <main>
-      <div className="d-md-flex mb-3">
-        <h1 className="mb-0">Find a Reservation</h1>
+      <div className="d-md-flex mb-3 text-center">
+        <h1 className="mb-0">Search</h1>
       </div>
       <form className="form-inline" onSubmit={handleSubmit}>
         <div className="form-group mx-sm-3 mb-2">

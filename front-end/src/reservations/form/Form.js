@@ -213,16 +213,16 @@ function Form({ method }) {
               </div>
             </div>
             <div className="btn-group" role="group" aria-label="form actions">
-              <button type="submit" className="btn btn-primary mr-4">
-                Submit
-              </button>
               <button
                 type="button"
                 value="Cancel"
-                className="btn btn-secondary"
+                className="btn btn-secondary mr-4"
                 onClick={handleCancel}
               >
                 Cancel
+              </button>
+              <button type="submit" className="btn btn-primary">
+                Submit
               </button>
             </div>
           </div>

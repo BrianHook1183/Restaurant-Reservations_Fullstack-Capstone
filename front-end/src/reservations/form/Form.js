@@ -212,17 +212,23 @@ function Form({ method }) {
                 />
               </div>
             </div>
-            <div className="btn-group" role="group" aria-label="form actions">
+            <div
+              className="btn-toolbar mb-5 justify-content-between"
+              role="toolbar"
+              aria-label="Toolbar with form actions buttons"
+            >
               <button
                 type="button"
                 value="Cancel"
-                className="btn btn-secondary mr-4"
+                className="btn btn-secondary"
                 onClick={handleCancel}
               >
-                Cancel
+                <span className="oi oi-action-undo" />
+                &nbsp;Cancel
               </button>
               <button type="submit" className="btn btn-primary">
-                Submit
+                Submit&nbsp;
+                <span className="oi oi-check" />
               </button>
             </div>
           </div>

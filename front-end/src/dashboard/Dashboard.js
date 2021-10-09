@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import formatDisplayDate from "../utils/format-display-date";
+import { formatAsTime } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
@@ -60,18 +61,36 @@ function Dashboard({ date }) {
   return (
     <main>
       <div className="row">
-        <div className="col-md-6 col-9 mx-auto">
-          <h4 className="mb-0 text-center">{displayDateLong}</h4>
+        <div className="col-12 mx-auto my-3">
+          <h1 className="mb-0 text-center">{displayDateLong}</h1>
+          <p className="text-center m-0 text-monospace">
+            Current Time: <span className="oi oi-clock" />
+            &nbsp;{formatAsTime(new Date().toTimeString())}
+          </p>
           <DateNavigation date={date} />
         </div>
       </div>
-      <h2 className="mb-0">Reservations:</h2>
-      <ReservationsList reservations={reservations} />
-      <ErrorAlert error={reservationsError} />
-      <hr className="py-2 bg-dark" />
-      <h2 className="mb-0">Tables:</h2>
-      <TablesList tables={tables} />
-      <ErrorAlert error={tablesError} />
+      <div className="row">
+        <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
+          <fieldset className="border p-3">
+            <legend className="w-auto px-2 font-weight-bold">
+              Reservations
+            </legend>
+            <ReservationsList reservations={reservations} />
+            <ErrorAlert error={reservationsError} />
+          </fieldset>
+        </div>
+      </div>
+      <hr className="my-5 py-1 shadow bg-dark rounded" />
+      <div className="row">
+        <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
+          <fieldset className="border p-3">
+            <legend className="w-auto px-2 font-weight-bold">Tables</legend>
+            <TablesList tables={tables} />
+            <ErrorAlert error={tablesError} />
+          </fieldset>
+        </div>
+      </div>
     </main>
   );
 }

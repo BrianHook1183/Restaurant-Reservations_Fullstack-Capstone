@@ -14,13 +14,16 @@ function Reservation({ reservation }) {
     people,
     status,
   } = reservation;
-  const statusStyles = {
+
+  const borderColor = status === "booked" ? "primary" : "muted";
+  const bookedShadow = status === "booked" ? "shadow bg-white rounded" : null;
+
+  const timeStyles = {
     booked: "danger",
     seated: "success",
     finished: "muted",
   };
-
-  const statusStyle = statusStyles[status];
+  const statusStyle = timeStyles[status];
 
   const history = useHistory();
   const [cancelReservationError, setCancelReservationError] = useState(null);
@@ -52,28 +55,32 @@ function Reservation({ reservation }) {
     ) : null;
 
   return (
-    <>
-      <div className="card-header">{reservation_time}</div>
-      <div className="card-body">
-        <h5 className="card-title">
-          "{last_name}, party of {people}!"
-        </h5>
-        <p className="card-text">
-          Contact: ({first_name}) {mobile_number}
+    <div
+      className={`card h-100 my-3 text-center border-${borderColor} ${bookedShadow}`}
+      style={{ minWidth: "14rem", maxWidth: "14rem" }}
+    >
+      <div className={`card-header text-${statusStyle}`}>
+        <span className="oi oi-clock" />
+        &nbsp;{reservation_time}
+      </div>
+      <div className={`card-body pb-1`}>
+        <span className="oi oi-people" />
+        <h2 className={`card-title w-25 mx-auto text-center`}>{people}</h2>
+        <p className="card-text m-0">
+          {first_name} {last_name}
         </p>
-        {buttons}
-        <ErrorAlert error={cancelReservationError} />
+        <span className="oi oi-phone" />
+        &nbsp;{mobile_number}
       </div>
-      <div className="card-footer">
+      {buttons}
+      <ErrorAlert error={cancelReservationError} />
+      <div className="card-footer text-monospace">
         {`Status: `}
-        <span
-          className={`text-${statusStyle}`}
-          data-reservation-id-status={reservation_id}
-        >
-          {status}
-        </span>
+        <span data-reservation-id-status={reservation_id}>{status}</span>
+        {/* &nbsp;
+        <span className="oi oi-link-intact" /> */}
       </div>
-    </>
+    </div>
   );
 }
 

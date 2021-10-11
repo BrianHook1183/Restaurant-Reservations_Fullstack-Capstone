@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Defines the toolbar of buttons on a reservation card
+ * Defines the toolbar of buttons on a "booked" reservation card
  */
 
 function ReservationButtons({ confirmCancel, id }) {

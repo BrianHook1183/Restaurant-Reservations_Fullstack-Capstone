@@ -6,9 +6,7 @@ import CurrentTime from "../widgets/CurrentTime";
 import "./Layout.css";
 
 /**
- * Defines the main layout of the application.
- *
- * You will not need to make changes to this file.
+ * The main layout of the application.
  *
  * @returns {JSX.Element}
  */

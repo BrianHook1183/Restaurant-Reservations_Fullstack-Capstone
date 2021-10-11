@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { today, previous, next } from "../utils/date-time";
 
 /**
- * Defines the date navigation for the Dashboard view.
+ * DateNavigation allows the user to change the active date for the Dashboard.
  */
 
 function DateNavigation({ date }) {

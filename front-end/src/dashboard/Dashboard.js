@@ -7,16 +7,9 @@ import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
 import TablesList from "../tables/list/TablesList";
 
-/**
- * Defines the dashboard page.
- * @param date
- *  the date for which the user wants to view reservations.
- * @returns {JSX.Element}
- */
-
+// date is passed from Routes.js as today()
+// IF there is a date provided in URL, then  = date
 function Dashboard({ date }) {
-  // date is passed from Routes.js as today()
-  // IF there is a date provided in URL, then  = date
   const dateInUrl = useQuery().get("date");
   if (dateInUrl) {
     date = dateInUrl;
@@ -55,7 +48,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  // convert YYYY-MM-DD to a more user-friendly format
+  // convert YYYY-MM-DD to a more user-friendly format, examples:
   // const displayDate = formatDisplayDate(date);
   // const displayDateShort = formatDisplayDate(date, "short");
   const displayDateLong = formatDisplayDate(date, "long");

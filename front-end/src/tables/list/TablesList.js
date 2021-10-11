@@ -4,7 +4,6 @@ import LoadingWheel from "../../widgets/LoadingWheel";
 import { Link } from "react-router-dom";
 
 function TablesList({ tables }) {
-  // JSX
   const noTablesMessage = (
     <p>
       There are no tables- create a

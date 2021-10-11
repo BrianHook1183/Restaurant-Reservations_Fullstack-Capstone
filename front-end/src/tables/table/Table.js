@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { finishTable } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * A card-based layout used to visualize each table
+ */
+
 function Table({ table }) {
   const { table_name, table_id, capacity } = table;
   const occupied = table.reservation_id;

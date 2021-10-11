@@ -4,6 +4,10 @@ import { useParams } from "react-router";
 import { listTables, assignToTable, getReservation } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * Handles assigning ("seating") a reservation to a table, which changes the reservation status from "booked" to "seated"
+ */
+
 function Seat() {
   const { reservation_id } = useParams();
   const history = useHistory();
@@ -58,8 +62,6 @@ function Seat() {
     history.goBack();
   };
 
-  //TODO style dropdown https://getbootstrap.com/docs/4.0/components/dropdowns/
-  //TODO or better yet, make into clickable tiles/cards instead
   return (
     <section>
       <h1>Assign Party of {reservationDetails.people} to a Table</h1>

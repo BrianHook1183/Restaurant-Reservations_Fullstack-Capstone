@@ -4,6 +4,10 @@ import { updateReservationStatus } from "../../utils/api";
 import ReservationButtons from "../buttons/ReservationButtons";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * A card-based layout used for each reservation
+ */
+
 function Reservation({ reservation }) {
   const {
     reservation_id,

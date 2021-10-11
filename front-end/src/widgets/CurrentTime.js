@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { formatAsTime } from "../utils/date-time";
 
+/**
+ * Returns a live clock in 24-hour format that is updated every minute
+ */
+
 function CurrentTime() {
   const [time, setTime] = useState(new Date().toTimeString());
   const timeFormatted = formatAsTime(time);

@@ -4,8 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/list/ReservationsList";
 
 /**
- * Defines the dashboard page.
- * @returns {JSX.Element}
+ * Defines the search page. Simple form returns partial matches for phone number
  */
 
 function Search() {

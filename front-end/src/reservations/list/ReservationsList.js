@@ -3,7 +3,6 @@ import Reservation from "../reservation/Reservation";
 import LoadingWheel from "../../widgets/LoadingWheel";
 
 function ReservationsList({ reservations }) {
-  // JSX
   const noReservationsMessage = (
     <span className="mx-auto">No reservations found.</span>
   );

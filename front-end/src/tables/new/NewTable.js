@@ -4,7 +4,7 @@ import { postTable } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 /**
- * A controlled form used for creating a table
+ * A controlled form used for creating a new table
  */
 
 function NewTable() {

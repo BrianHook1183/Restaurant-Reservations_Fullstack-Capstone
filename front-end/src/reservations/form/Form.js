@@ -31,7 +31,6 @@ function Form({ method }) {
 
   // load reservation details from url param and fill form
   useEffect(() => {
-    //Avoids this warning from trying to conditionally run useEffect: " React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks"
     if (method === "POST") return;
 
     const abortController = new AbortController();

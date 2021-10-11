@@ -78,9 +78,9 @@ function Reservation({ reservation }) {
         </p>
         <a
           className={
-            status === "seated"
-              ? "text-muted font-weight-light"
-              : "font-weight-bolder"
+            status === "booked"
+              ? "font-weight-bolder"
+              : "text-muted font-weight-light"
           }
           href={`tel:${mobile_number}`}
         >

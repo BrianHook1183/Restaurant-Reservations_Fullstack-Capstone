@@ -214,14 +214,14 @@ function Form({ method }) {
             </div>
             <ErrorAlert error={reservationsError} />
             <div
-              className="btn-toolbar mb-5 justify-content-between"
+              className="btn-toolbar mb-5"
               role="toolbar"
               aria-label="Toolbar with form actions buttons"
             >
               <button
                 type="button"
                 value="Cancel"
-                className="btn btn-secondary"
+                className="btn btn-secondary mr-5"
                 onClick={handleCancel}
               >
                 <span className="oi oi-action-undo mr-2" />

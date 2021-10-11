@@ -91,17 +91,23 @@ function NewTable() {
                 />
               </div>
             </div>
-            <div className="btn-group" role="group" aria-label="form actions">
+            <div
+              className="btn-toolbar mb-5"
+              role="toolbar"
+              aria-label="Toolbar with form actions buttons"
+            >
               <button
                 type="button"
                 value="Cancel"
-                className="btn btn-secondary mr-4"
+                className="btn btn-secondary mr-5"
                 onClick={handleCancel}
               >
+                <span className="oi oi-action-undo mr-2" />
                 Cancel
               </button>
               <button type="submit" className="btn btn-primary">
                 Submit
+                <span className="oi oi-check ml-2" />
               </button>
             </div>
           </div>

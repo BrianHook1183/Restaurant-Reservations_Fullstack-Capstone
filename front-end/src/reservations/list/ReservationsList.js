@@ -5,7 +5,7 @@ import LoadingWheel from "../../widgets/LoadingWheel";
 function ReservationsList({ reservations }) {
   // JSX
   const noReservationsMessage = (
-    <span className="mx-auto">There are no reservations for that query</span>
+    <span className="mx-auto">No reservations found.</span>
   );
 
   // displays while waiting for api response, and if there are 0 results

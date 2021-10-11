@@ -198,7 +198,7 @@ function Form({ method }) {
               <label htmlFor="people" className="col-md-4 col-form-label">
                 Party Size:
               </label>
-              <div className="col-3 col-sm-2 pt-2">
+              <div className="col-3 pt-2">
                 <input
                   id="people"
                   type="number"

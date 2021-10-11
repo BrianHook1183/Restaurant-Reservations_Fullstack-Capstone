@@ -54,7 +54,9 @@ function Reservation({ reservation }) {
   let buttons = null;
   if (status === "booked") {
     buttons = (
-      <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
+      <div className={"bg-light"}>
+        <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
+      </div>
     );
   }
 
@@ -89,7 +91,12 @@ function Reservation({ reservation }) {
       <ErrorAlert error={cancelReservationError} />
       <div className="card-footer text-monospace py-1">
         {`Status: `}
-        <span data-reservation-id-status={reservation_id}>{status}</span>
+        <span
+          className={`text-${statusStyle}`}
+          data-reservation-id-status={reservation_id}
+        >
+          {status}
+        </span>
       </div>
       {buttons}
     </div>

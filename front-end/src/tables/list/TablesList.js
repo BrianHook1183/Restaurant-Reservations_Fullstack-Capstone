@@ -24,19 +24,9 @@ function TablesList({ tables }) {
   // waits for "loading" status to be replaced by a non-empty array of tables
   if (tables.length && tables !== "loading") {
     tablesMapped = tables.map((table, index) => (
-      <div className="col mb-4" key={index}>
-        <div
-          className={`card h-100 border-${
-            table.reservation_id ? "dark" : "primary"
-          }`}
-        >
-          <Table table={table} />
-        </div>
-      </div>
+      <Table table={table} key={index} />
     ));
-    tablesList = (
-      <div className="card-deck">{tablesMapped}</div>
-    );
+    tablesList = <div className="card-deck">{tablesMapped}</div>;
   }
 
   // tablesList renders if there is at least 1 table, noTables decides between showing "loading" or "no tables"

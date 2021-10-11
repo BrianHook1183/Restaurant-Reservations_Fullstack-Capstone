@@ -49,10 +49,12 @@ function Reservation({ reservation }) {
     }
   };
 
-  const buttons =
-    status === "booked" ? (
+  let buttons = null;
+  if (status === "booked") {
+    buttons = (
       <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
-    ) : null;
+    );
+  }
 
   return (
     <div

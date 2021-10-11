@@ -4,6 +4,13 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
+function toLocalTime(dateString) {
+  const d = new Date(dateString);
+  const offset = (new Date().getTimezoneOffset() / 60) * -1;
+  const n = new Date(d.getTime() + offset);
+  return n;
+}
+
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId);
@@ -67,11 +74,11 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(dateString) {
-  const now = new Date();
-  // creating a date object using a string like:  '2021-10-08'
-  const reservationDate = new Date(dateString);
-  return reservationDate >= now;
+function dateNotInPast(dateString, timeString) {
+  const nowServer = new Date();
+  // creating a date object using a string like:  '2021-10-08T01:21:00'
+  const reservationDate = toLocalTime(new Date(dateString + "T" + timeString));
+  return reservationDate >= nowServer;
 }
 
 function timeDuringBizHours(timeString) {
@@ -117,7 +124,9 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. now according to server= ${new Date()}. reservation_date after local timezone conversion= ${toLocalTime(
+        reservation_date
+      )}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

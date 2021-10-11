@@ -71,7 +71,7 @@ function dateNotInPast(localDateObject) {
   const nowServer = new Date();
   const serverUtcHours = nowServer.getUTCHours();
 
-  const nowServerValue = nowServer.setUTCHours(serverUtcHours).valueOf();
+  const nowServerValue = nowServer.setUTCHours(serverUtcHours - 5).valueOf();
   const localValue = localDateObject.valueOf();
 
   return localValue >= nowServerValue;
@@ -124,7 +124,7 @@ function hasValidValues(req, res, next) {
     const nowServer = new Date();
     const serverUtcHours = nowServer.getUTCHours();
 
-    const nowServerValue = nowServer.setUTCHours(serverUtcHours).valueOf();
+    const nowServerValue = nowServer.setUTCHours(serverUtcHours - 5).valueOf();
     const localValue = localDateObject.valueOf();
 
     const result = localValue >= nowServerValue;

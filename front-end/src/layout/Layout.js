@@ -5,9 +5,7 @@ import Routes from "./Routes";
 import "./Layout.css";
 
 /**
- * Defines the main layout of the application.
- *
- * You will not need to make changes to this file.
+ * The main layout of the application.
  *
  * @returns {JSX.Element}
  */
@@ -15,7 +13,7 @@ function Layout() {
   return (
     <div className="container-fluid">
       <div className="row h-100">
-        <div className="col-md-2 side-bar">
+        <div className="col-md-2 side-bar bg-menu">
           <Menu />
         </div>
         <div className="col">

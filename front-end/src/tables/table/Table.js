@@ -3,6 +3,10 @@ import { useHistory } from "react-router-dom";
 import { finishTable } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * A card-based layout used to visualize each table
+ */
+
 function Table({ table }) {
   const { table_name, table_id, capacity } = table;
   const occupied = table.reservation_id;
@@ -31,32 +35,49 @@ function Table({ table }) {
   if (occupied) {
     finish = (
       <button
-        className="btn btn-primary"
+        className="btn btn-primary shadow w-75 mb-3"
         data-table-id-finish={`${table_id}`}
         onClick={confirmFinish}
       >
+        <span className="oi oi-check mr-2" />
         Finish
       </button>
     );
   }
 
   return (
-    <div className="card-body">
-      <h5 className="card-title">Table {table_name}</h5>
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item">Capacity: {capacity}</li>
-        <li className="list-group-item">
-          <div className={`text-center bg-${occupied ? "light" : "success"}`}>
-            <h6>
-              <span data-table-id-status={`${table_id}`}>
-                {occupied ? "occupied" : "free"}
-              </span>
-            </h6>
-            <ErrorAlert error={finishTableError} />
-          </div>
-        </li>
-        <li className="list-group-item text-center">{finish}</li>
-      </ul>
+    <div
+      className={`card h-100 m-0 mx-2 mb-3 text-center border-${
+        table.reservation_id ? "dark" : "primary"
+      }`}
+      style={{ minWidth: "200", maxWidth: "250px" }}
+    >
+      <h5 className="card-header p-0 py-2">Table {table_name}</h5>
+      <div className="card-body p-0">
+        <div className={`text-monospace py-1`}>
+          {`Status: `}
+          <span
+            className={`text-${
+              occupied ? "secondary" : "success font-weight-bold"
+            }`}
+            data-table-id-status={`${table_id}`}
+          >
+            {occupied ? "occupied" : "free"}
+          </span>
+        </div>
+        <p className={`card-text mb-3`}>
+          Capacity:{" "}
+          <span
+            className={`text-${
+              occupied ? "secondary" : "success font-weight-bold"
+            }`}
+          >
+            {capacity}
+          </span>
+        </p>
+        {finish}
+        <ErrorAlert error={finishTableError} />
+      </div>
     </div>
   );
 }

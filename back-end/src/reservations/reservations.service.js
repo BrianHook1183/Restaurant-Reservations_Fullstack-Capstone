@@ -1,7 +1,5 @@
 const knex = require("../db/connection");
 
-//TODO now that list() was split into searchByDate and searchByPhone, should probably make a generic list() to return all
-
 // returns non-finished reservations for the specified date
 function searchByDate(date) {
   return knex("reservations")

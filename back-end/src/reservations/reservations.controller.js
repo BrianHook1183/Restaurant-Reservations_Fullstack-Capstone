@@ -67,16 +67,17 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(reservation_date, reservation_time) {
-  const today = Date.now();
-  const date = new Date(`${reservation_date} ${reservation_time}`);
-  return date.valueOf() > today;
+function dateNotInPast(dateString, timeString) {
+  const now = new Date();
+  // creating a date object using a string like:  '2021-10-08T01:21:00'
+  const reservationDate = new Date(dateString + "T" + timeString);
+  return reservationDate >= now;
 }
 
-function timeDuringBizHours(reservation_time) {
+function timeDuringBizHours(timeString) {
   const open = "10:30";
   const close = "21:30";
-  return reservation_time <= close && reservation_time >= open;
+  return timeString <= close && timeString >= open;
 }
 
 function dateNotTuesday(dateString) {
@@ -116,8 +117,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message:
-        "The reservation_time and/or reservation_date is in the past. Only future reservations are allowed",
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {
@@ -206,8 +206,8 @@ async function list(req, res) {
 }
 
 // Read handler for reservation resources
+//* res.locals.reservation is being set from reservationExists()
 async function read(req, res) {
-  //* res.locals.reservation is being set from reservationExists()
   const { reservation } = res.locals;
   res.json({ data: reservation });
 }

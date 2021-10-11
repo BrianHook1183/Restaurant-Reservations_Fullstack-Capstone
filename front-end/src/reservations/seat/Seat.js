@@ -4,6 +4,10 @@ import { useParams } from "react-router";
 import { listTables, assignToTable, getReservation } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * Handles assigning ("seating") a reservation to a table, which changes the reservation status from "booked" to "seated"
+ */
+
 function Seat() {
   const { reservation_id } = useParams();
   const history = useHistory();
@@ -52,43 +56,45 @@ function Seat() {
     return () => abortController.abort();
   };
 
+  // cancelling a table assignment while in progress sends user back to previous page.
   const handleCancel = (event) => {
     event.preventDefault();
-    // cancelling a table assignment while in progress sends user back to previous page.
     history.goBack();
   };
-  //TODO style dropdown https://getbootstrap.com/docs/4.0/components/dropdowns/
-  //TODO or better yet, make into clickable tiles/cards instead
+
   return (
     <section>
       <h1>Assign Party of {reservationDetails.people} to a Table</h1>
       <ErrorAlert error={allTablesError} />
       <ErrorAlert error={reservationError} />
       <form onSubmit={handleSubmit}>
-        <label htmlFor="table_id">Table: </label>
+        <label htmlFor="table_id" className={"sr-only"}>
+          Pick Table:{" "}
+        </label>
         <select
           name="table_id"
           onChange={(e) => setFormData({ [e.target.name]: e.target.value })}
           required={true}
         >
-          <option defaultValue>Table - Capacity</option>
+          <option defaultValue>Table: # - Capacity: #</option>
           {allTables.map(({ table_id, table_name, capacity }) => (
             <option key={table_id} value={table_id}>
               {table_name} - {capacity}
             </option>
           ))}
         </select>
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
         <button
           type="button"
-          className="btn btn-light"
           value="Cancel"
+          className="btn btn-sm btn-secondary mx-2"
           onClick={handleCancel}
         >
+          <span className="oi oi-action-undo mr-2" />
           Cancel
+        </button>
+        <button type="submit" className="btn btn-sm btn-primary">
+          Submit
+          <span className="oi oi-check ml-2" />
         </button>
       </form>
       <ErrorAlert error={assignTableError} />

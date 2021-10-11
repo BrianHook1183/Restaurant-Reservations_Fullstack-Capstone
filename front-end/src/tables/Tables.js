@@ -4,7 +4,7 @@ import NewTable from "./new/NewTable";
 import NotFound from "../layout/NotFound";
 
 /**
- * Defines the tables page.
+ * Routes for all table based actions- currently can only create new tables
  */
 
 function Tables() {

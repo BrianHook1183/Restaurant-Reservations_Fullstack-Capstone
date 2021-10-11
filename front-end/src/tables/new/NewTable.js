@@ -4,7 +4,7 @@ import { postTable } from "../../utils/api";
 import ErrorAlert from "../../layout/ErrorAlert";
 
 /**
- * A controlled form used for creating a table
+ * A controlled form used for creating a new table
  */
 
 function NewTable() {
@@ -52,39 +52,66 @@ function NewTable() {
 
   return (
     <section>
-      <div className="d-md-flex mb-3">
-        <h1 className="mb-0">Add a New Table</h1>
+      <div className="d-md-flex mb-3 text-center">
+        <h1 className="mb-0">New Table</h1>
       </div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="table_name">
-          Table Name:
-          <input
-            id="table_name"
-            type="text"
-            name="table_name"
-            onChange={handleChange}
-            value={formData.table_name}
-            required={true}
-          />
-        </label>
-        <br />
-        <label htmlFor="capacity">
-          Capacity:
-          <input
-            id="capacity"
-            type="number"
-            name="capacity"
-            onChange={handleChange}
-            required={true}
-            min="1"
-            value={formData.capacity}
-          />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-        <button type="button" value="Cancel" onClick={handleCancel}>
-          Cancel
-        </button>
+        <div className="row">
+          <div className="col-auto">
+            <div className="form-group form-row">
+              <label htmlFor="table_name" className="col-md-4 col-form-label">
+                Table Name:
+              </label>
+              <div className="col-8 pt-2">
+                <input
+                  id="table_name"
+                  type="text"
+                  name="table_name"
+                  className="form-control"
+                  onChange={handleChange}
+                  value={formData.table_name}
+                  required={true}
+                />
+              </div>
+            </div>
+            <div className="form-group form-row">
+              <label htmlFor="capacity" className="col-md-4 col-form-label">
+                Capacity:
+              </label>
+              <div className="col-3 pt-2">
+                <input
+                  id="capacity"
+                  type="number"
+                  name="capacity"
+                  className="form-control"
+                  onChange={handleChange}
+                  required={true}
+                  min="1"
+                  value={formData.capacity}
+                />
+              </div>
+            </div>
+            <div
+              className="btn-toolbar mb-5"
+              role="toolbar"
+              aria-label="Toolbar with form actions buttons"
+            >
+              <button
+                type="button"
+                value="Cancel"
+                className="btn btn-secondary mr-5"
+                onClick={handleCancel}
+              >
+                <span className="oi oi-action-undo mr-2" />
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary">
+                Submit
+                <span className="oi oi-check ml-2" />
+              </button>
+            </div>
+          </div>
+        </div>
       </form>
       <ErrorAlert error={tablesError} />
     </section>

@@ -1,40 +1,39 @@
 import React from "react";
 import Reservation from "../reservation/Reservation";
+import LoadingWheel from "../../widgets/LoadingWheel";
 
 function ReservationsList({ reservations }) {
+  const noReservationsMessage = (
+    <span className="mx-auto">No reservations found.</span>
+  );
+
+  // displays while waiting for api response, and if there are 0 results
+  const noReservations =
+    reservations === "loading" ? <LoadingWheel /> : noReservationsMessage;
+
+  let reservationsMapped;
+  let reservationsList = null;
   const currentReservations = [];
   const finishedReservations = [];
 
-  //  ensures finished reservations do not render
-  //! finishedReservations were being kept just in case they were needed in future ---- but, as of us-06, reservations does not contain any finished reservations anyways
-  reservations.forEach((res) => {
-    // if (res.status === "finished") {
-    if (["finished", "cancelled"].includes(res.status)) {
-      finishedReservations.push(res);
-    } else {
-      currentReservations.push(res);
-    }
-  });
+  // waits for "loading" status to be replaced by a non-empty array of reservations
+  if (reservations.length && reservations !== "loading") {
+    //  filters out finished reservations from rendering. "cancelled" could be added as well - tests are not affected either way.
+    reservations.forEach((res) => {
+      if (["finished"].includes(res.status)) {
+        finishedReservations.push(res);
+      } else {
+        currentReservations.push(res);
+      }
+    });
 
-  const reservationsList = currentReservations.map((res, index) => (
-    <div className="col mb-4" key={index}>
-      <div
-        className={`card h-100 text-center border-${
-          res.status === "booked" ? "primary" : "dark"
-        }`}
-        key={index}
-      >
-        <Reservation reservation={res} />
-      </div>
-    </div>
-  ));
+    reservationsMapped = currentReservations.map((res, index) => (
+      <Reservation key={index} reservation={res} />
+    ));
+    reservationsList = <div className="card-deck">{reservationsMapped}</div>;
+  }
 
-  // if reservationsList is null/undefined, will not render, until there is a reservations array with at least 1 reservation
-  return (
-    <div className="row row-cols-1 row-cols-md-3">
-      {reservationsList ?? "(...no reservations on this date)"}
-    </div>
-  );
+  return reservationsList ?? noReservations;
 }
 
 export default ReservationsList;

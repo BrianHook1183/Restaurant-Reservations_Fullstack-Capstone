@@ -4,6 +4,10 @@ import { updateReservationStatus } from "../../utils/api";
 import ReservationButtons from "../buttons/ReservationButtons";
 import ErrorAlert from "../../layout/ErrorAlert";
 
+/**
+ * A card-based layout used for each reservation
+ */
+
 function Reservation({ reservation }) {
   const {
     reservation_id,
@@ -14,13 +18,18 @@ function Reservation({ reservation }) {
     people,
     status,
   } = reservation;
-  const statusStyles = {
+
+  const borderColor = status === "booked" ? "primary" : "muted";
+  const bookedShadow = status === "booked" ? "shadow bg-white rounded" : null;
+  const cancelledGray =
+    status === "cancelled" ? "text-black-50 bg-light" : null;
+  const timeStyles = {
     booked: "danger",
     seated: "success",
     finished: "muted",
+    cancelled: "white",
   };
-
-  const statusStyle = statusStyles[status];
+  const statusStyle = timeStyles[status];
 
   const history = useHistory();
   const [cancelReservationError, setCancelReservationError] = useState(null);
@@ -46,25 +55,47 @@ function Reservation({ reservation }) {
     }
   };
 
-  const buttons =
-    status === "booked" ? (
-      <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
-    ) : null;
+  let buttons = null;
+  if (status === "booked") {
+    buttons = (
+      <div className={"bg-light"}>
+        <ReservationButtons confirmCancel={confirmCancel} id={reservation_id} />
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div className="card-header">{reservation_time}</div>
-      <div className="card-body">
-        <h5 className="card-title">
-          "{last_name}, party of {people}!"
-        </h5>
-        <p className="card-text">
-          Contact: ({first_name}) {mobile_number}
-        </p>
-        {buttons}
-        <ErrorAlert error={cancelReservationError} />
+    <div
+      className={`card h-100 m-0 mx-2 mb-3 text-center ${cancelledGray} border-${borderColor} ${bookedShadow}`}
+      style={{ minWidth: "218px", maxWidth: "236px" }}
+    >
+      <div className={`card-header p-0 py-2 text-${statusStyle}`}>
+        <span className="oi oi-clock mr-2" />
+        {reservation_time}
       </div>
-      <div className="card-footer">
+
+      <div className={`card-body p-0 py-2`}>
+        <span className={`oi oi-people`} />
+        <h3 className={"card-text font-weight-bold d-inline ml-2"}>{people}</h3>
+        <p className="card-text mt-2 mb-1 ">
+          {first_name} {last_name}
+        </p>
+        <a
+          className={`p-0 
+            ${
+              status === "booked"
+                ? "font-weight-bolder"
+                : "text-muted font-weight-light"
+            }
+          `}
+          href={`tel:${mobile_number}`}
+        >
+          <span className="oi oi-phone mr-2" />
+          {mobile_number}
+        </a>
+      </div>
+
+      <div className="card-footer text-monospace p-0 py-1">
         {`Status: `}
         <span
           className={`text-${statusStyle}`}
@@ -72,8 +103,10 @@ function Reservation({ reservation }) {
         >
           {status}
         </span>
+        <ErrorAlert error={cancelReservationError} />
       </div>
-    </>
+      {buttons}
+    </div>
   );
 }
 

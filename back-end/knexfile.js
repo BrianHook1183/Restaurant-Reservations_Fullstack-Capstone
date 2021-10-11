@@ -1,7 +1,5 @@
 /**
  * Knex configuration file.
- *
- * You will not need to make changes to this file.
  */
 
 require('dotenv').config();

@@ -6,7 +6,7 @@ import Seat from "./seat/Seat";
 import Edit from "./edit/Edit";
 
 /**
- * Defines the reservations page.
+ * Routes the user based on action: creating, assigning to table, and editing
  */
 
 function Reservations() {

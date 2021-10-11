@@ -69,22 +69,12 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-// function toUTC() {
-//   const localDate = new Date();
-//   const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-//   return utcDate;
-// }
-
 function dateNotInPast(localDateObject) {
   const nowServer = new Date();
-  const serverToUTCString = nowServer.toUTCString()
-  const localToUTCString = localDateObject.toUTCString()
-  const localToUTCObject = new Date(localToUTCString)
-  const serverToUTCObject = new Date(serverToUTCString)
-  // const nowUTC = toUTC();
-  // creating a date object using a string like:  '2021-10-08T01:21:00'
-  // const reservationDate = toUTC(dateString, timeString);
-  return localToUTCObject >= serverToUTCObject;
+
+  const utcHours = localDateObject.getUTCHours()
+  const localToUtc = localDateObject.setUTCHours(utcHours + 5);
+  return localToUtc >= nowServer;
 }
 
 function timeDuringBizHours(timeString) {
@@ -108,7 +98,10 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
-  const localDateObject = new Date(reservation_date + "T" + reservation_time);
+  const localDateObject =  new Date(reservation_date + "T" + reservation_time);
+
+  // let utcDate = new Date(Date.UTC(2018, 11, 1, 0, 0, 0));
+ 
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -130,15 +123,17 @@ function hasValidValues(req, res, next) {
   }
   if (!dateNotInPast(localDateObject)) {
 
+
     const nowServer = new Date();
-    const serverToUTCString = nowServer.toUTCString()
-    const localToUTCString = localDateObject.toUTCString()
-    const localToUTCObject = new Date(localToUTCString)
-    const serverToUTCObject = new Date(serverToUTCString)
+    const serverUtcHours = nowServer.getUTCHours()
+    nowServer.setUTCHours(serverUtcHours - 5);
+    const nowServerValue = nowServer.valueOf();
+
+    const localValue = localDateObject.valueOf();
 
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}            nowServer=${nowServer}   serverToUTCString=${serverToUTCString}      localToUTCString=${localToUTCString}             localToUTCObject=${localToUTCObject}     serverToUTCObject=${serverToUTCObject}                               localToUTCObject >= serverToUTCObject= ${localToUTCObject >= serverToUTCObject}`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}             nowServer.valueOf();=${nowServer.valueOf()}      localValue=${localValue}                       localToUtc >= serverToUTCObject= ${localValue >= nowServerValue}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

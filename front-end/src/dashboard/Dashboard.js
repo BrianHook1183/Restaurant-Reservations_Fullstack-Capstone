@@ -6,6 +6,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
 import TablesList from "../tables/list/TablesList";
+import CurrentTime from "../widgets/CurrentTime";
 
 // date is passed from Routes.js as today()
 // IF there is a date provided in URL, then  = date
@@ -63,20 +64,21 @@ function Dashboard({ date }) {
       </div>
       <div className="row">
         <div className="col-md-12 mx-auto">
-          <fieldset className="border p-3 m-0">
-            <legend className="w-auto px-2 font-weight-bold m-0">
-              Reservations
+          <fieldset className="border border-bottom-0 border-dark p-3 m-0">
+            <legend className="pl-2 shadow bg-dark rounded sticky-top">
+              <CurrentTime sectionTitle={"Reservations"} />
             </legend>
             <ReservationsList reservations={reservations} />
             <ErrorAlert error={reservationsError} />
           </fieldset>
         </div>
       </div>
-      <hr className="mt-3 py-1 shadow bg-dark rounded" />
-      <div className="row">
+      <div className="row mt-3">
         <div className="col-md-12 mx-auto">
-          <fieldset className="border p-3">
-            <legend className="w-auto px-2 font-weight-bold ">Tables</legend>
+          <fieldset className="border border-bottom-0 border-dark p-3 m-0">
+            <legend className="pl-2 text-white shadow bg-dark rounded sticky-top">
+              Tables
+            </legend>
             <TablesList tables={tables} />
             <ErrorAlert error={tablesError} />
           </fieldset>

@@ -1,7 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
 import Routes from "./Routes";
-import CurrentTime from "../widgets/CurrentTime";
 
 import "./Layout.css";
 
@@ -18,9 +17,6 @@ function Layout() {
           <Menu />
         </div>
         <div className="col">
-          <div className="bg-menu sticky-top">
-            <CurrentTime />
-          </div>
           <Routes />
         </div>
       </div>

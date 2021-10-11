@@ -124,7 +124,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. now according to server= ${new Date()}. reservation_date after local timezone conversion= ${toLocalTime(
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time} new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(new Date(dateString + "T" + timeString))=${toLocalTime(new Date(reservation_date + "T" + reservation_time))}        . now according to server= ${new Date()}. reservation_date after local timezone conversion= ${toLocalTime(
         reservation_date
       )}`,
     });

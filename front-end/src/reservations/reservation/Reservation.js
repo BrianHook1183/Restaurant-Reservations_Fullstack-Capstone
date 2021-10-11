@@ -17,11 +17,13 @@ function Reservation({ reservation }) {
 
   const borderColor = status === "booked" ? "primary" : "muted";
   const bookedShadow = status === "booked" ? "shadow bg-white rounded" : null;
-
+  const cancelledGray =
+    status === "cancelled" ? "text-black-50 bg-light" : null;
   const timeStyles = {
     booked: "danger",
     seated: "success",
     finished: "muted",
+    cancelled: "white",
   };
   const statusStyle = timeStyles[status];
 
@@ -58,7 +60,7 @@ function Reservation({ reservation }) {
 
   return (
     <div
-      className={`card h-100 my-3 text-center border-${borderColor} ${bookedShadow}`}
+      className={`card h-100 my-3 text-center ${cancelledGray} border-${borderColor} ${bookedShadow}`}
       style={{ minWidth: "14rem", maxWidth: "14rem" }}
     >
       <div className={`card-header text-${statusStyle}`}>
@@ -79,8 +81,6 @@ function Reservation({ reservation }) {
       <div className="card-footer text-monospace">
         {`Status: `}
         <span data-reservation-id-status={reservation_id}>{status}</span>
-        {/* &nbsp;
-        <span className="oi oi-link-intact" /> */}
       </div>
     </div>
   );

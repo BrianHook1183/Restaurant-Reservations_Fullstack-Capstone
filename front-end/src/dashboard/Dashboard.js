@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import useQuery from "../utils/useQuery";
 import { listReservations, listTables } from "../utils/api";
 import formatDisplayDate from "../utils/format-display-date";
-import { formatAsTime } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import DateNavigation from "./DateNavigation";
 import ReservationsList from "../reservations/list/ReservationsList";
@@ -23,16 +22,18 @@ function Dashboard({ date }) {
     date = dateInUrl;
   }
 
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState("loading");
   const [reservationsError, setReservationsError] = useState(null);
 
-  const [tables, setTables] = useState([]);
+  const [tables, setTables] = useState("loading");
   const [tablesError, setTablesError] = useState(null);
 
   useEffect(loadReservations, [date]);
   useEffect(loadTables, []);
 
   function loadReservations() {
+    setReservations("loading");
+
     const abortController = new AbortController();
     setReservationsError(null);
 
@@ -45,6 +46,7 @@ function Dashboard({ date }) {
   }
 
   function loadTables() {
+    setTables("loading");
     const abortController = new AbortController();
     setTablesError(null);
 
@@ -62,18 +64,14 @@ function Dashboard({ date }) {
     <main>
       <div className="row">
         <div className="col-12 mx-auto my-3">
-          <h1 className="mb-0 text-center">{displayDateLong}</h1>
-          <p className="text-center m-0 text-monospace">
-            Current Time: <span className="oi oi-clock" />
-            &nbsp;{formatAsTime(new Date().toTimeString())}
-          </p>
+          <h2 className="mb-0 text-center">{displayDateLong}</h2>
           <DateNavigation date={date} />
         </div>
       </div>
       <div className="row">
         <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
           <fieldset className="border p-3">
-            <legend className="w-auto px-2 font-weight-bold">
+            <legend className="w-auto px-2 font-weight-bold ">
               Reservations
             </legend>
             <ReservationsList reservations={reservations} />
@@ -85,7 +83,7 @@ function Dashboard({ date }) {
       <div className="row">
         <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
           <fieldset className="border p-3">
-            <legend className="w-auto px-2 font-weight-bold">Tables</legend>
+            <legend className="w-auto px-2 font-weight-bold ">Tables</legend>
             <TablesList tables={tables} />
             <ErrorAlert error={tablesError} />
           </fieldset>

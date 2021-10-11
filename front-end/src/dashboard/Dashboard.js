@@ -69,9 +69,9 @@ function Dashboard({ date }) {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
-          <fieldset className="border p-3">
-            <legend className="w-auto px-2 font-weight-bold ">
+        <div className="col-md-12 mx-auto">
+          <fieldset className="border p-3 m-0">
+            <legend className="w-auto px-2 font-weight-bold m-0">
               Reservations
             </legend>
             <ReservationsList reservations={reservations} />
@@ -79,9 +79,9 @@ function Dashboard({ date }) {
           </fieldset>
         </div>
       </div>
-      <hr className="my-5 py-1 shadow bg-dark rounded" />
+      <hr className="mt-3 py-1 shadow bg-dark rounded" />
       <div className="row">
-        <div className="col-md-10 offset-md-1 text-center wow fadeInUp">
+        <div className="col-md-12 mx-auto">
           <fieldset className="border p-3">
             <legend className="w-auto px-2 font-weight-bold ">Tables</legend>
             <TablesList tables={tables} />

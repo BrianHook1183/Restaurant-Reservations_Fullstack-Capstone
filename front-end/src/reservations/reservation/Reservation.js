@@ -69,6 +69,7 @@ function Reservation({ reservation }) {
         <span className="oi oi-clock mr-2" />
         {reservation_time}
       </div>
+
       <div className={`card-body py-2`}>
         <span className={`oi oi-people`} />
         <h3 className={"card-text font-weight-bold d-inline ml-2"}>{people}</h3>
@@ -88,7 +89,6 @@ function Reservation({ reservation }) {
         </a>
       </div>
 
-      <ErrorAlert error={cancelReservationError} />
       <div className="card-footer text-monospace py-1">
         {`Status: `}
         <span
@@ -97,6 +97,7 @@ function Reservation({ reservation }) {
         >
           {status}
         </span>
+        <ErrorAlert error={cancelReservationError} />
       </div>
       {buttons}
     </div>

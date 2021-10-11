@@ -68,30 +68,33 @@ function Seat() {
       <ErrorAlert error={allTablesError} />
       <ErrorAlert error={reservationError} />
       <form onSubmit={handleSubmit}>
-        <label htmlFor="table_id">Table: </label>
+        <label htmlFor="table_id" className={"sr-only"}>
+          Pick Table:{" "}
+        </label>
         <select
           name="table_id"
           onChange={(e) => setFormData({ [e.target.name]: e.target.value })}
           required={true}
         >
-          <option defaultValue>Table - Capacity</option>
+          <option defaultValue>Table: # - Capacity: #</option>
           {allTables.map(({ table_id, table_name, capacity }) => (
             <option key={table_id} value={table_id}>
-              {table_name} - {capacity}
+              Table {table_name} - Capacity: {capacity}
             </option>
           ))}
         </select>
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
         <button
           type="button"
-          className="btn btn-light"
           value="Cancel"
+          className="btn btn-sm btn-secondary mx-2"
           onClick={handleCancel}
         >
+          <span className="oi oi-action-undo mr-2" />
           Cancel
+        </button>
+        <button type="submit" className="btn btn-sm btn-primary">
+          Submit
+          <span className="oi oi-check ml-2" />
         </button>
       </form>
       <ErrorAlert error={assignTableError} />

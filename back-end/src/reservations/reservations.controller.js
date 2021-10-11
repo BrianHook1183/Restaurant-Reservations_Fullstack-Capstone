@@ -124,7 +124,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time} new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(dateString, timeString)=${toLocalTime(reservation_date, reservation_time)}        . now according to server= ${new Date()}.`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time}                new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(dateString, timeString)=${toLocalTime(reservation_date, reservation_time)} . now according to server= ${new Date()}.                                 new Date(dateString + "T" + timeString).toString()=${new Date(reservation_date + "T" + reservation_time).toString()} and toLocalTime(dateString, timeString).toString()=${toLocalTime(reservation_date, reservation_time).toString()} . new Date().toString() according to server= ${new Date().toString()}.`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

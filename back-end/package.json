@@ -1,12 +1,12 @@
 {
-  "name": "starter-restaurant-reservation-back-end",
+  "name": "restaurant-reservation-system-back-end",
   "version": "1.0.0",
-  "description": "Starter code for restaurant reservation backend",
+  "description": "Restaurant reservation system backend",
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation",
-    "directory": "/back-end"
+    "url": "https://github.com/BrianHook1183/Restaurant-Reservations_Fullstack-Capstone",
+    "directory": "/tree/main/back-end"
   },
   "scripts": {
     "start": "node src/server.js",

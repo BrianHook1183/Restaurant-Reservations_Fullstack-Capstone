@@ -4,8 +4,8 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-function toLocalTime(dateString) {
-  const d = new Date(dateString);
+function toLocalTime(dateString, timeString) {
+  const d = new Date(dateString + "T" + timeString);
   const offset = (new Date().getTimezoneOffset() / 60) * -1;
   const n = new Date(d.getTime() + offset);
   return n;
@@ -77,7 +77,7 @@ function dateFormatIsValid(dateString) {
 function dateNotInPast(dateString, timeString) {
   const nowServer = new Date();
   // creating a date object using a string like:  '2021-10-08T01:21:00'
-  const reservationDate = toLocalTime(new Date(dateString + "T" + timeString));
+  const reservationDate = toLocalTime(dateString, timeString);
   return reservationDate >= nowServer;
 }
 
@@ -124,9 +124,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time} new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(new Date(dateString + "T" + timeString))=${toLocalTime(new Date(reservation_date + "T" + reservation_time))}        . now according to server= ${new Date()}. reservation_date after local timezone conversion= ${toLocalTime(
-        reservation_date
-      )}`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time} new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(dateString, timeString)=${toLocalTime(dateString, timeString)}        . now according to server= ${new Date()}.`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

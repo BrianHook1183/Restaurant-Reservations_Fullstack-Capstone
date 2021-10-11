@@ -4,12 +4,7 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-function toLocalTime(dateString, timeString) {
-  const d = new Date(dateString + "T" + timeString);
-  const offset = (new Date().getTimezoneOffset() / 60) * -1;
-  const n = new Date(d.getTime() + offset);
-  return n;
-}
+
 
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
@@ -74,10 +69,16 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
+function toUTC(reservation_date, reservation_time) {
+  const localDate = new Date(reservation_date + "T" + reservation_time);
+  const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+  return utcDate;
+}
+
 function dateNotInPast(dateString, timeString) {
   const nowServer = new Date();
   // creating a date object using a string like:  '2021-10-08T01:21:00'
-  const reservationDate = toLocalTime(dateString, timeString);
+  const reservationDate = toUTC(dateString, timeString);
   return reservationDate >= nowServer;
 }
 
@@ -124,7 +125,7 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(reservation_date, reservation_time)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. reservation_date= ${reservation_date} and reservation_time=${reservation_time}                new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toLocalTime(dateString, timeString)=${toLocalTime(reservation_date, reservation_time)} . now according to server= ${new Date()}.                                 new Date(dateString + "T" + timeString).toString()=${new Date(reservation_date + "T" + reservation_time).toString()} and toLocalTime(dateString, timeString).toString()=${toLocalTime(reservation_date, reservation_time).toString()} . new Date().toString() according to server= ${new Date().toString()}.`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toUTC(dateString, timeString)=${toUTC(reservation_date, reservation_time)} . now according to server= ${new Date()}.`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

@@ -12,7 +12,7 @@ function ReservationButtons({ confirmCancel, id }) {
       aria-label="reservation actions"
     >
       <div
-        className="btn-group w-75 my-3"
+        className="btn-group w-75"
         role="group"
         aria-label="Assign to Table Button"
       >
@@ -22,7 +22,7 @@ function ReservationButtons({ confirmCancel, id }) {
         </a>
       </div>
       <div
-        className="btn-group w-75"
+        className="btn-group w-75 mt-2"
         role="group"
         aria-label="Toolbar with button groups "
       >

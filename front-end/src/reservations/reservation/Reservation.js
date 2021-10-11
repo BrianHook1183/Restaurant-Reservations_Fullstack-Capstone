@@ -73,17 +73,25 @@ function Reservation({ reservation }) {
         <p className="card-text m-0">
           {first_name} {last_name}
         </p>
-        <a href={`tel:${mobile_number}`}>
+        <a
+          className={
+            status === "seated"
+              ? "text-muted font-weight-light"
+              : "font-weight-bolder"
+          }
+          href={`tel:${mobile_number}`}
+        >
           <span className="oi oi-phone" />
           &nbsp;{mobile_number}
         </a>
       </div>
-      {buttons}
+
       <ErrorAlert error={cancelReservationError} />
       <div className="card-footer text-monospace">
         {`Status: `}
         <span data-reservation-id-status={reservation_id}>{status}</span>
       </div>
+      {buttons}
     </div>
   );
 }

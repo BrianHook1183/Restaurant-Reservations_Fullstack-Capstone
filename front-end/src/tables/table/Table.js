@@ -42,9 +42,8 @@ function Table({ table }) {
   }
 
   return (
-    // <div className="col mb-4">
     <div
-      className={`card h-100 border-${
+      className={`card h-100 text-center border-${
         table.reservation_id ? "dark" : "primary"
       }`}
       style={{ minWidth: "14rem", maxWidth: "14rem" }}
@@ -76,7 +75,6 @@ function Table({ table }) {
         <ErrorAlert error={finishTableError} />
       </div>
     </div>
-    // </div>
   );
 }
 

@@ -4,8 +4,6 @@ const hasProperties = require("../errors/hasProperties");
 
 //* Validation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-
-
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
   const reservation = await service.read(reservationId);
@@ -71,10 +69,12 @@ function dateFormatIsValid(dateString) {
 
 function dateNotInPast(localDateObject) {
   const nowServer = new Date();
+  const serverUtcHours = nowServer.getUTCHours();
 
-  const utcHours = localDateObject.getUTCHours()
-  const localToUtc = localDateObject.setUTCHours(utcHours + 5);
-  return localToUtc >= nowServer;
+  const nowServerValue = nowServer.setUTCHours(serverUtcHours).valueOf();
+  const localValue = localDateObject.valueOf();
+
+  return localValue >= nowServerValue;
 }
 
 function timeDuringBizHours(timeString) {
@@ -98,10 +98,9 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
-  const localDateObject =  new Date(reservation_date + "T" + reservation_time);
+  const localDateObject = new Date(reservation_date + "T" + reservation_time);
 
   // let utcDate = new Date(Date.UTC(2018, 11, 1, 0, 0, 0));
- 
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -122,18 +121,17 @@ function hasValidValues(req, res, next) {
     });
   }
   if (!dateNotInPast(localDateObject)) {
-
-
     const nowServer = new Date();
-    const serverUtcHours = nowServer.getUTCHours()
-    nowServer.setUTCHours(serverUtcHours - 5);
-    const nowServerValue = nowServer.valueOf();
+    const serverUtcHours = nowServer.getUTCHours();
 
+    const nowServerValue = nowServer.setUTCHours(serverUtcHours).valueOf();
     const localValue = localDateObject.valueOf();
+
+    const result = localValue >= nowServerValue;
 
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}             nowServer.valueOf();=${nowServer.valueOf()}      localValue=${localValue}                       localToUtc >= serverToUTCObject= ${localValue >= nowServerValue}`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}    serverUtcHours=${serverUtcHours}         nowServerValue${nowServerValue}      localValue=${localValue}                       localValue >= nowServerValue= ${result}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

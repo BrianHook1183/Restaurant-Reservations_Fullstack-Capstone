@@ -73,8 +73,10 @@ function Reservation({ reservation }) {
         <p className="card-text m-0">
           {first_name} {last_name}
         </p>
-        <span className="oi oi-phone" />
-        &nbsp;{mobile_number}
+        <a href={`tel:${mobile_number}`}>
+          <span className="oi oi-phone" />
+          &nbsp;{mobile_number}
+        </a>
       </div>
       {buttons}
       <ErrorAlert error={cancelReservationError} />

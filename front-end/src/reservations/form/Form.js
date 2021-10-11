@@ -212,6 +212,7 @@ function Form({ method }) {
                 />
               </div>
             </div>
+            <ErrorAlert error={reservationsError} />
             <div
               className="btn-toolbar mb-5 justify-content-between"
               role="toolbar"
@@ -234,7 +235,6 @@ function Form({ method }) {
           </div>
         </div>
       </form>
-      <ErrorAlert error={reservationsError} />
     </>
   );
 }

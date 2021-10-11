@@ -78,7 +78,7 @@ function NewTable() {
               <label htmlFor="capacity" className="col-md-4 col-form-label">
                 Capacity:
               </label>
-              <div className="col-4 col-sm-2 pt-2">
+              <div className="col-3 pt-2">
                 <input
                   id="capacity"
                   type="number"

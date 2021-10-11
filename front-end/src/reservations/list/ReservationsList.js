@@ -19,10 +19,8 @@ function ReservationsList({ reservations }) {
 
   // waits for "loading" status to be replaced by a non-empty array of reservations
   if (reservations.length && reservations !== "loading") {
-    //  filters out finished and cancelled reservations from rendering
-    //! experimenting with letting cancelled reservations display. not sure if it breaks tests or not, but will help in case of no reservations message.
+    //  filters out finished reservations from rendering. "cancelled" could be added as well - tests are not affected either way.
     reservations.forEach((res) => {
-      //! if (["finished", "cancelled"].includes(res.status)) {
       if (["finished"].includes(res.status)) {
         finishedReservations.push(res);
       } else {

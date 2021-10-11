@@ -66,26 +66,28 @@ function Reservation({ reservation }) {
 
   return (
     <div
-      className={`card h-100 my-3 text-center ${cancelledGray} border-${borderColor} ${bookedShadow}`}
-      style={{ minWidth: "14rem", maxWidth: "14rem" }}
+      className={`card h-100 m-0 mx-2 mb-3 text-center ${cancelledGray} border-${borderColor} ${bookedShadow}`}
+      style={{ minWidth: "218px", maxWidth: "236px" }}
     >
-      <div className={`card-header text-${statusStyle}`}>
+      <div className={`card-header p-0 py-2 text-${statusStyle}`}>
         <span className="oi oi-clock mr-2" />
         {reservation_time}
       </div>
 
-      <div className={`card-body py-2`}>
+      <div className={`card-body p-0 py-2`}>
         <span className={`oi oi-people`} />
         <h3 className={"card-text font-weight-bold d-inline ml-2"}>{people}</h3>
         <p className="card-text mt-2 mb-1 ">
           {first_name} {last_name}
         </p>
         <a
-          className={
-            status === "booked"
-              ? "font-weight-bolder"
-              : "text-muted font-weight-light"
-          }
+          className={`p-0 
+            ${
+              status === "booked"
+                ? "font-weight-bolder"
+                : "text-muted font-weight-light"
+            }
+          `}
           href={`tel:${mobile_number}`}
         >
           <span className="oi oi-phone mr-2" />
@@ -93,7 +95,7 @@ function Reservation({ reservation }) {
         </a>
       </div>
 
-      <div className="card-footer text-monospace py-1">
+      <div className="card-footer text-monospace p-0 py-1">
         {`Status: `}
         <span
           className={`text-${statusStyle}`}

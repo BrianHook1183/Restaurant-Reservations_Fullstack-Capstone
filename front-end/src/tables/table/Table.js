@@ -47,12 +47,12 @@ function Table({ table }) {
 
   return (
     <div
-      className={`card h-100 text-center border-${
+      className={`card h-100 m-0 mx-2 mb-3 text-center border-${
         table.reservation_id ? "dark" : "primary"
       }`}
-      style={{ minWidth: "14rem", maxWidth: "14rem" }}
+      style={{ minWidth: "200", maxWidth: "250px" }}
     >
-      <h4 className="card-header">Table {table_name}</h4>
+      <h5 className="card-header p-0 py-2">Table {table_name}</h5>
       <div className="card-body p-0">
         <div className={`text-monospace py-1`}>
           {`Status: `}

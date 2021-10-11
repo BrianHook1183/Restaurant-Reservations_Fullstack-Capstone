@@ -24,6 +24,7 @@ function Search() {
   function loadReservations() {
     const abortController = new AbortController();
     setReservationsError(null);
+    setReservations("loading");
     setResultsMessage("...searching as fast as I can!");
     listReservationsByMobile(mobileNumber, abortController.signal)
       .then(setReservations)
@@ -39,10 +40,13 @@ function Search() {
     loadReservations();
   };
 
-  const searchResults = (
-    <h6 className="mt-5">
-      {reservations.length ? "Search Results:" : resultsMessage}
-    </h6>
+  const searchResults = reservations.length ? (
+    <>
+      <h6 className="mt-5">Search Results:</h6>
+      <ReservationsList reservations={reservations} />
+    </>
+  ) : (
+    resultsMessage
   );
 
   return (
@@ -51,7 +55,7 @@ function Search() {
         <h1 className="mb-0">Search</h1>
       </div>
       <form className="form-inline" onSubmit={handleSubmit}>
-        <div className="form-group mx-sm-3 mb-2">
+        <div className="form-group mb-2">
           <label className="sr-only">mobile_number</label>
           <input
             id="mobile_number"
@@ -64,12 +68,12 @@ function Search() {
             required={true}
           />
         </div>
-        <button type="submit" className="btn btn-primary mb-2">
+        <button type="submit" className="btn btn-primary ml-2 mb-2">
+          <span className="oi oi-magnifying-glass mr-2" />
           Find
         </button>
       </form>
       {searchResults}
-      <ReservationsList reservations={reservations} />
       <ErrorAlert error={reservationsError} />
     </main>
   );

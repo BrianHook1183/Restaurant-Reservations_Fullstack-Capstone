@@ -69,17 +69,22 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function toUTC(reservation_date, reservation_time) {
-  const localDate = new Date(reservation_date + "T" + reservation_time);
-  const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-  return utcDate;
-}
+// function toUTC() {
+//   const localDate = new Date();
+//   const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+//   return utcDate;
+// }
 
-function dateNotInPast(dateString, timeString) {
+function dateNotInPast(localDateObject) {
   const nowServer = new Date();
+  const serverToUTCString = nowServer.toUTCString()
+  const localToUTCString = localDateObject.toUTCString()
+  const localToUTCObject = new Date(localToUTCString)
+  const serverToUTCObject = new Date(serverToUTCString)
+  // const nowUTC = toUTC();
   // creating a date object using a string like:  '2021-10-08T01:21:00'
-  const reservationDate = toUTC(dateString, timeString);
-  return reservationDate >= nowServer;
+  // const reservationDate = toUTC(dateString, timeString);
+  return localToUTCObject >= serverToUTCObject;
 }
 
 function timeDuringBizHours(timeString) {
@@ -103,6 +108,7 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
+  const localDateObject = new Date(reservation_date + "T" + reservation_time);
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -122,10 +128,17 @@ function hasValidValues(req, res, next) {
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
     });
   }
-  if (!dateNotInPast(reservation_date, reservation_time)) {
+  if (!dateNotInPast(localDateObject)) {
+
+    const nowServer = new Date();
+    const serverToUTCString = nowServer.toUTCString()
+    const localToUTCString = localDateObject.toUTCString()
+    const localToUTCObject = new Date(localToUTCString)
+    const serverToUTCObject = new Date(serverToUTCString)
+
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed. new Date(dateString + "T" + timeString)=${new Date(reservation_date + "T" + reservation_time)} and toUTC(dateString, timeString)=${toUTC(reservation_date, reservation_time)} . now according to server= ${new Date()}.`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}            nowServer=${nowServer}   serverToUTCString=${serverToUTCString}      localToUTCString=${localToUTCString}             localToUTCObject=${localToUTCObject}     serverToUTCObject=${serverToUTCObject}                               localToUTCObject >= serverToUTCObject= ${localToUTCObject >= serverToUTCObject}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

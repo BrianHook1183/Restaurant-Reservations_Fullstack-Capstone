@@ -224,12 +224,12 @@ function Form({ method }) {
                 className="btn btn-secondary"
                 onClick={handleCancel}
               >
-                <span className="oi oi-action-undo" />
-                &nbsp;Cancel
+                <span className="oi oi-action-undo mr-2" />
+                Cancel
               </button>
               <button type="submit" className="btn btn-primary">
-                Submit&nbsp;
-                <span className="oi oi-check" />
+                Submit
+                <span className="oi oi-check ml-2" />
               </button>
             </div>
           </div>

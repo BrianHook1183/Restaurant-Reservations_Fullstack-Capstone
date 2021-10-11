@@ -64,8 +64,8 @@ function Reservation({ reservation }) {
       style={{ minWidth: "14rem", maxWidth: "14rem" }}
     >
       <div className={`card-header text-${statusStyle}`}>
-        <span className="oi oi-clock" />
-        &nbsp;{reservation_time}
+        <span className="oi oi-clock mr-2" />
+        {reservation_time}
       </div>
       <div className={`card-body py-2`}>
         <span className={`oi oi-people`} />
@@ -81,8 +81,8 @@ function Reservation({ reservation }) {
           }
           href={`tel:${mobile_number}`}
         >
-          <span className="oi oi-phone" />
-          &nbsp;{mobile_number}
+          <span className="oi oi-phone mr-2" />
+          {mobile_number}
         </a>
       </div>
 

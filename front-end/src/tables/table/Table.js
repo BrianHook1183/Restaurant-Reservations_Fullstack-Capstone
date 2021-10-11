@@ -31,10 +31,11 @@ function Table({ table }) {
   if (occupied) {
     finish = (
       <button
-        className="btn btn-primary"
+        className="btn btn-primary shadow w-75"
         data-table-id-finish={`${table_id}`}
         onClick={confirmFinish}
       >
+        <span className="oi oi-check mr-2" />
         Finish
       </button>
     );
@@ -55,8 +56,8 @@ function Table({ table }) {
             <ErrorAlert error={finishTableError} />
           </div>
         </li>
-        <li className="list-group-item text-center">{finish}</li>
       </ul>
+      {finish}
     </div>
   );
 }

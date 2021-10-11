@@ -35,7 +35,7 @@ function TablesList({ tables }) {
       </div>
     ));
     tablesList = (
-      <div className="row row-cols-1 row-cols-md-3">{tablesMapped}</div>
+      <div className="card-deck">{tablesMapped}</div>
     );
   }
 

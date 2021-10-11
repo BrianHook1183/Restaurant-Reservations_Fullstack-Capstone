@@ -21,8 +21,8 @@ function CurrentTime() {
 
   return (
     <div className="text-center text-white m-0 text-monospace">
-      Current Time: <span className="oi oi-clock" />
-      &nbsp;{timeFormatted}
+      Current Time: <span className="oi oi-clock mr-2" />
+      {timeFormatted}
     </div>
   );
 }

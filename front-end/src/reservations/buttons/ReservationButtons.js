@@ -17,8 +17,8 @@ function ReservationButtons({ confirmCancel, id }) {
         aria-label="Assign to Table Button"
       >
         <a href={`/reservations/${id}/seat`} className="btn btn-primary shadow">
-          <span className="oi oi-arrow-circle-bottom" />
-          &nbsp;Seat
+          <span className="oi oi-arrow-circle-bottom mr-2" />
+          Seat
         </a>
       </div>
       <div
@@ -30,8 +30,8 @@ function ReservationButtons({ confirmCancel, id }) {
           href={`/reservations/${id}/edit`}
           className="btn btn-sm btn-secondary w-25 mr-1"
         >
-          <span className="oi oi-pencil" />
-          &nbsp;Edit
+          <span className="oi oi-pencil mr-2" />
+          Edit
         </a>
         <button
           type="button"
@@ -39,8 +39,8 @@ function ReservationButtons({ confirmCancel, id }) {
           onClick={confirmCancel}
           data-reservation-id-cancel={id}
         >
-          <span className="oi oi-ban" />
-          &nbsp;Cancel
+          <span className="oi oi-ban mr-1" />
+          Cancel
         </button>
       </div>
     </div>

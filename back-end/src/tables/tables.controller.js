@@ -15,7 +15,6 @@ async function hasReservationId(req, res, next) {
   });
 }
 
-//TODO this should probably import over from reservations.controller
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.body.data;
   const reservation = await reservationsService.read(reservation_id);
@@ -133,8 +132,6 @@ function hasOnlyValidProperties(req, res, next) {
 }
 
 const hasRequiredProperties = hasProperties(...["table_name", "capacity"]);
-
-//TODO table_name should have to be unique. Can currently post "#5" twice.
 
 function tableNameIsValid(tableName) {
   return tableName.length > 1;

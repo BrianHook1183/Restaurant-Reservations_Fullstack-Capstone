@@ -79,7 +79,7 @@ function Seat() {
           <option defaultValue>Table: # - Capacity: #</option>
           {allTables.map(({ table_id, table_name, capacity }) => (
             <option key={table_id} value={table_id}>
-              Table {table_name} - Capacity: {capacity}
+              {table_name} - {capacity}
             </option>
           ))}
         </select>

@@ -67,11 +67,13 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(dateString, timeString) {
-  const now = new Date();
-  // creating a date object using a string like:  '2021-10-08T01:21:00'
-  const reservationDate = new Date(dateString + "T" + timeString);
-  return reservationDate >= now;
+function dateNotInPast(reqDateObject) {
+  const serverCurrentDateObject = new Date();
+
+  const reqDateValue = reqDateObject.valueOf();
+  const serverCurrentDateValue = serverCurrentDateObject.valueOf();
+
+  return reqDateValue >= serverCurrentDateValue;
 }
 
 function timeDuringBizHours(timeString) {
@@ -95,6 +97,13 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
+  const reqDateObject = new Date(reservation_date + "T" + reservation_time);
+
+  // Modifying request date to match server's UTC date.
+  const reqHours = reqDateObject.getHours();
+  // assumes the incoming request came from the central timezone
+  const reqHoursOffset = reqHours + 5;
+  reqDateObject.setHours(reqHoursOffset);
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -114,10 +123,10 @@ function hasValidValues(req, res, next) {
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
     });
   }
-  if (!dateNotInPast(reservation_date, reservation_time)) {
+  if (!dateNotInPast(reqDateObject)) {
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

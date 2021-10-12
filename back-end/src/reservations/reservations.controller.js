@@ -67,17 +67,13 @@ function dateFormatIsValid(dateString) {
   return dateString.match(dateFormat)?.[0];
 }
 
-function dateNotInPast(localDateObject) {
-  const nowServer = new Date();
-  const serverUtcHours = nowServer.getUTCHours();
+function dateNotInPast(reqDateObject) {
+  const serverCurrentDateObject = new Date();
 
-  const timezoneOffset = nowServer.getTimezoneOffset() / 60;
-  const nowServerValue = nowServer
-    .setUTCHours(serverUtcHours - timezoneOffset)
-    .valueOf();
-  const localValue = localDateObject.valueOf();
+  const reqDateValue = reqDateObject.valueOf();
+  const serverCurrentDateValue = serverCurrentDateObject.valueOf();
 
-  return localValue >= nowServerValue;
+  return reqDateValue >= serverCurrentDateValue;
 }
 
 function timeDuringBizHours(timeString) {
@@ -101,7 +97,12 @@ function statusIsBookedOrNull(status) {
 
 function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
-  const localDateObject = new Date(reservation_date + "T" + reservation_time);
+
+  //Modifying request date to match server's UTC date.
+  const reqDateObject = new Date(reservation_date + "T" + reservation_time);
+  const reqHours = reqDateObject.getHours();
+  const reqHoursOffset = reqHours + 5;
+  reqDateObject.setHours(reqHoursOffset);
 
   if (!Number.isInteger(people) || people < 1) {
     return next({
@@ -121,21 +122,17 @@ function hasValidValues(req, res, next) {
       message: "reservation_date must be in YYYY-MM-DD (ISO-8601) format",
     });
   }
-  if (!dateNotInPast(localDateObject)) {
-    const nowServer = new Date();
-    const serverUtcHours = nowServer.getUTCHours();
-    // #hours off of UTC
-    const timezoneOffset = nowServer.getTimezoneOffset() / 60;
-    const nowServerValue = nowServer
-      .setUTCHours(serverUtcHours - timezoneOffset)
-      .valueOf();
-    const localValue = localDateObject.valueOf();
+  if (!dateNotInPast(reqDateObject)) {
+    const serverCurrentDateObject = new Date();
 
-    const result = localValue >= nowServerValue;
+    const reqDateValue = reqDateObject.valueOf();
+    const serverCurrentDateValue = serverCurrentDateObject.valueOf();
+
+    const result = reqDateValue >= serverCurrentDateValue;
 
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}    serverUtcHours=${serverUtcHours}   timezoneOffset=${timezoneOffset}      nowServerValue${nowServerValue}      localValue=${localValue}                       localValue >= nowServerValue= ${result}`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    reqDateObject=${reqDateObject}          serverCurrentDateObject=${serverCurrentDateObject}    serverCurrentDateValue${serverCurrentDateValue}                           reqDateValue >= serverCurrentDateValue= ${result}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

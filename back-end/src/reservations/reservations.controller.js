@@ -252,7 +252,7 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   update: [
-    reservationExists,
+    asyncErrorBoundary(reservationExists),
     hasOnlyValidProperties,
     hasRequiredProperties,
     hasValidValues,
@@ -260,7 +260,7 @@ module.exports = {
     asyncErrorBoundary(update),
   ],
   updateStatus: [
-    reservationExists,
+    asyncErrorBoundary(reservationExists),
     statusIsValid,
     statusNotFinished,
     asyncErrorBoundary(updateStatus),

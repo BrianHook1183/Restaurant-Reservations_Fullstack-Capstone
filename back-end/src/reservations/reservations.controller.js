@@ -71,7 +71,10 @@ function dateNotInPast(localDateObject) {
   const nowServer = new Date();
   const serverUtcHours = nowServer.getUTCHours();
 
-  const nowServerValue = nowServer.setUTCHours(serverUtcHours - 5).valueOf();
+  const timezoneOffset = nowServer.getTimezoneOffset() / 60;
+  const nowServerValue = nowServer
+    .setUTCHours(serverUtcHours - timezoneOffset)
+    .valueOf();
   const localValue = localDateObject.valueOf();
 
   return localValue >= nowServerValue;
@@ -100,8 +103,6 @@ function hasValidValues(req, res, next) {
   const { reservation_date, reservation_time, people } = req.body.data;
   const localDateObject = new Date(reservation_date + "T" + reservation_time);
 
-  // let utcDate = new Date(Date.UTC(2018, 11, 1, 0, 0, 0));
-
   if (!Number.isInteger(people) || people < 1) {
     return next({
       status: 400,
@@ -123,15 +124,18 @@ function hasValidValues(req, res, next) {
   if (!dateNotInPast(localDateObject)) {
     const nowServer = new Date();
     const serverUtcHours = nowServer.getUTCHours();
-
-    const nowServerValue = nowServer.setUTCHours(serverUtcHours - 5).valueOf();
+    // #hours off of UTC
+    const timezoneOffset = nowServer.getTimezoneOffset() / 60;
+    const nowServerValue = nowServer
+      .setUTCHours(serverUtcHours - timezoneOffset)
+      .valueOf();
     const localValue = localDateObject.valueOf();
 
     const result = localValue >= nowServerValue;
 
     return next({
       status: 400,
-      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}    serverUtcHours=${serverUtcHours}         nowServerValue${nowServerValue}      localValue=${localValue}                       localValue >= nowServerValue= ${result}`,
+      message: `You are attempting to submit a reservation in the past. Only future reservations are allowed.    localDateObject=${localDateObject}          nowServer=${nowServer}    serverUtcHours=${serverUtcHours}   timezoneOffset=${timezoneOffset}      nowServerValue${nowServerValue}      localValue=${localValue}                       localValue >= nowServerValue= ${result}`,
     });
   }
   if (!timeDuringBizHours(reservation_time)) {

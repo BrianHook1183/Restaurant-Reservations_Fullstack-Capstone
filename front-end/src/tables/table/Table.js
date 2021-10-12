@@ -50,7 +50,7 @@ function Table({ table }) {
       className={`card h-100 m-0 mx-2 mb-3 text-center border-${
         table.reservation_id ? "dark" : "primary"
       }`}
-      style={{ minWidth: "200px", maxWidth: "250px" }}
+      style={{ minWidth: "200px", maxWidth: "200px" }}
     >
       <h5 className="card-header p-0 py-2">Table {table_name}</h5>
       <div className="card-body p-0">

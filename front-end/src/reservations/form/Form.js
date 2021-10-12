@@ -211,7 +211,6 @@ function Form({ method }) {
                 />
               </div>
             </div>
-            <ErrorAlert error={reservationsError} />
             <div
               className="btn-toolbar mb-5"
               role="toolbar"
@@ -231,6 +230,7 @@ function Form({ method }) {
                 <span className="oi oi-check ml-2" />
               </button>
             </div>
+            <ErrorAlert error={reservationsError} />
           </div>
         </div>
       </form>
